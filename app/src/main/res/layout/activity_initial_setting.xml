@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    tools:context="k4284.tongsinboan.Intro.InitialSetting.InitialSettingActivity">
+    tools:context="k4284.tongsinboan.Intro.InitialSettingActivity">
 
     <LinearLayout
         android:layout_width="300dp"

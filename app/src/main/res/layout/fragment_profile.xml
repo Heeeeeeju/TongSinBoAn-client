@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    tools:context="k4284.tongsinboan.Intro.Register.RegisterActivity">
+    tools:context="k4284.tongsinboan.Intro.RegisterActivity">
 
     <ImageView
         android:id="@+id/profile_image"

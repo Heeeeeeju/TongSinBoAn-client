@@ -1,4 +1,4 @@
-package k4284.tongsinboan.Intro.Register;
+package k4284.tongsinboan.Intro;
 
 import android.content.Intent;
 import android.graphics.Bitmap;

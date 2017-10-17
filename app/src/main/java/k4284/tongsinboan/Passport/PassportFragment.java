@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
@@ -58,22 +59,27 @@ public class PassportFragment extends Fragment {
         return view;
     }
 
-    public void GenerateQrCode(ImageView qrCodeView, TextView textRemainTime)
+    public void GenerateQrCode(final ImageView qrCodeView, final TextView textRemainTime)
     {
         DeleteQrCode();
-        UpdateRemainTime(RE_GENERATE_TIME, textRemainTime);
-        try {
-            String data = GeneratePassData();
-            Bitmap bitmap = EncodeAsBitmap(data);
-            if (bitmap != null) {
-                qrCodeView.setImageBitmap(bitmap);
-                GenerateTimer(RE_GENERATE_TIME, textRemainTime);
-            } else {
-                GenerateTimer(0, textRemainTime);
+        timerHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                UpdateRemainTime(RE_GENERATE_TIME, textRemainTime);
+                try {
+                    String data = GeneratePassData();
+                    Bitmap bitmap = EncodeAsBitmap(data);
+                    if (bitmap != null) {
+                        qrCodeView.setImageBitmap(bitmap);
+                        GenerateTimer(RE_GENERATE_TIME, textRemainTime);
+                    } else {
+                        Toast.makeText(getContext(), "출입 코드 생성에 실패했습니다", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
-        } catch (WriterException e) {
-            e.printStackTrace();
-        }
+        }, 200);
     }
 
     public void DeleteQrCode()

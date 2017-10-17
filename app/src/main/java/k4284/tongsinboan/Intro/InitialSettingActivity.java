@@ -1,7 +1,6 @@
-package k4284.tongsinboan.Intro.InitialSetting;
+package k4284.tongsinboan.Intro;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -9,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import k4284.tongsinboan.App;
 import k4284.tongsinboan.MainActivity;
 import k4284.tongsinboan.R;
 
@@ -30,8 +30,8 @@ public class InitialSettingActivity extends AppCompatActivity {
         admin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                admin.setBackgroundColor(Color.argb(255, 51, 102, 204));
-                user.setBackgroundColor(Color.argb(255, 153, 153, 153));
+                admin.setBackgroundColor(App.SelectedColor);
+                user.setBackgroundColor(App.UnSelectedColor);
                 groupName.setHint("관리 부대 이름 입력");
                 isUser = false;
                 selectType = true;
@@ -41,8 +41,8 @@ public class InitialSettingActivity extends AppCompatActivity {
         user.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                admin.setBackgroundColor(Color.argb(255, 153, 153, 153));
-                user.setBackgroundColor(Color.argb(255, 51, 102, 204));
+                admin.setBackgroundColor(App.UnSelectedColor);
+                user.setBackgroundColor(App.SelectedColor);
                 groupName.setHint("소속 부대 코드 입력");
                 isUser = true;
                 selectType = true;

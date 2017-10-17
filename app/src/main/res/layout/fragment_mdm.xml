@@ -12,7 +12,8 @@
         android:padding="10dp"
         android:text="휴대폰 정책"
         android:textSize="25sp"
-        android:background="#AAA"/>
+        android:textColor="#FFF"
+        android:background="@color/unselected"/>
 
     <ListView
         android:id="@+id/mdm_policy_list"
@@ -26,7 +27,8 @@
         android:padding="10dp"
         android:text="출입 권한"
         android:textSize="25sp"
-        android:background="#AAA"/>
+        android:textColor="#FFF"
+        android:background="@color/unselected"/>
 
     <ListView
         android:id="@+id/mdm_pass_right_list"

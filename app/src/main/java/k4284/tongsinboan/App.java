@@ -1,6 +1,7 @@
 package k4284.tongsinboan;
 
 import android.app.Application;
+import android.support.v4.content.ContextCompat;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
@@ -8,7 +9,11 @@ import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
  * Created by Administrator on 2017-10-16.
  */
 
-public class MyApplication extends Application {
+public class App extends Application {
+
+    public static int SelectedColor;
+    public static int UnSelectedColor;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -18,5 +23,8 @@ public class MyApplication extends Application {
                 .setFontAttrId(R.attr.fontPath)
                 .build()
         );
+
+        SelectedColor = ContextCompat.getColor(getApplicationContext(), R.color.selected);
+        UnSelectedColor = ContextCompat.getColor(getApplicationContext(), R.color.unselected);
     }
 }
