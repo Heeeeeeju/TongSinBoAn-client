@@ -1,24 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
     android:orientation="vertical"
-    tools:context="k4284.tongsinboan.Intro.IntroActivity">
+    tools:context="k4284.tongsinboan.Intro.LoginActivity">
+
+    <EditText
+        android:id="@+id/intro_id"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center_horizontal"
+        android:paddingLeft="10dp"
+        android:hint="군번"
+        android:textSize="18sp"/>
+
+    <EditText
+        android:id="@+id/intro_password"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center_horizontal"
+        android:paddingLeft="10dp"
+        android:hint="비밀번호"
+        android:inputType="textPassword"
+        android:textSize="18sp"/>
 
     <Button
         android:id="@+id/button_login"
         android:layout_width="300dp"
-        android:layout_height="150dp"
+        android:layout_height="50dp"
         android:layout_gravity="center"
-        android:text="Login"/>
+        android:layout_marginTop="20dp"
+        android:text="로그인"/>
 
     <Button
         android:id="@+id/button_register"
         android:layout_width="300dp"
-        android:layout_height="150dp"
+        android:layout_height="50dp"
         android:layout_gravity="center"
-        android:text="Register"/>
+        android:layout_marginTop="50dp"
+        android:background="@android:color/transparent"
+        android:text="계정이 없으신가요? 회원가입"/>
 
 </LinearLayout>

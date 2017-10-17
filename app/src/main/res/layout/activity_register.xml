@@ -10,17 +10,22 @@
 
     <FrameLayout
         android:layout_width="300dp"
-        android:layout_height="400dp">
+        android:layout_height="300dp"
+        android:layout_marginTop="50dp">
 
-        <Button
+        <TextView
             android:id="@+id/add_profile_image"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="프로필 이미지 등록"
+            android:textSize="20sp"/>
 
         <ImageView
             android:id="@+id/profile_image"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:background="@drawable/border"/>
 
     </FrameLayout>
 
