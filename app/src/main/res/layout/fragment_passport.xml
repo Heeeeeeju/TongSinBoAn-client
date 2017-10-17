@@ -1,0 +1,32 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    tools:context="k4284.tongsinboan.Passport.PassportFragment">
+
+    <ImageView
+        android:id="@+id/passport_qr_code"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_marginTop="50dp"
+        android:padding="1dp"
+        android:background="@drawable/border"/>
+
+    <TextView
+        android:id="@+id/passport_remain_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="00:00"
+        android:textSize="20sp"/>
+
+    <Button
+        android:id="@+id/passport_create_qr_code"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="30dp"
+        android:text="출입증 생성"/>
+
+</LinearLayout>
