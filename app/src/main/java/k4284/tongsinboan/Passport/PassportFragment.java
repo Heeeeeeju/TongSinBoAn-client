@@ -3,7 +3,6 @@ package k4284.tongsinboan.Passport;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Debug;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -26,7 +25,7 @@ import k4284.tongsinboan.R;
 
 public class PassportFragment extends Fragment {
 
-    private final static int RE_GENERATE_TIME = 30;
+    public final static int RE_GENERATE_TIME = 30;
     private Handler timerHandler;
 
     public PassportFragment()
@@ -62,14 +61,15 @@ public class PassportFragment extends Fragment {
     public void GenerateQrCode(ImageView qrCodeView, TextView textRemainTime)
     {
         DeleteQrCode();
+        UpdateRemainTime(RE_GENERATE_TIME, textRemainTime);
         try {
             String data = GeneratePassData();
             Bitmap bitmap = EncodeAsBitmap(data);
             if (bitmap != null) {
                 qrCodeView.setImageBitmap(bitmap);
-                ReGenerateTimer(RE_GENERATE_TIME, textRemainTime);
+                GenerateTimer(RE_GENERATE_TIME, textRemainTime);
             } else {
-                ReGenerateTimer(0, textRemainTime);
+                GenerateTimer(0, textRemainTime);
             }
         } catch (WriterException e) {
             e.printStackTrace();
@@ -106,30 +106,33 @@ public class PassportFragment extends Fragment {
         return bitmap;
     }
 
-    private void ReGenerateTimer(final int remainTime, final TextView textRemainTime)
+    private void GenerateTimer(final int remainTime, final TextView textRemainTime)
     {
         if (remainTime < 0) {
-            // TODO : Qr Code 생성
             DeleteQrCode();
-            ReGenerateTimer(RE_GENERATE_TIME, textRemainTime);
+            GenerateTimer(RE_GENERATE_TIME, textRemainTime);
         } else {
-            UpdateRemainTime(remainTime, textRemainTime);
+            WaitOneSecond(remainTime, textRemainTime);
         }
     }
 
-    private void UpdateRemainTime(final int remainTime, final TextView textRemainTime)
+    private void WaitOneSecond(final int remainTime, final TextView textRemainTime)
     {
+        UpdateRemainTime(remainTime, textRemainTime);
         timerHandler.postDelayed(new Runnable(){
             @Override
             public void run() {
-                ReGenerateTimer(remainTime - 1, textRemainTime);
-
-                DecimalFormat timeFormat = new DecimalFormat("00");
-                String formattedMinute = timeFormat.format(remainTime / 60);
-                String formattedSecond = timeFormat.format(remainTime % 60);
-                String formattedTime = formattedMinute + ":" + formattedSecond;
-                textRemainTime.setText(formattedTime);
+                GenerateTimer(remainTime - 1, textRemainTime);
             }
         }, 1000);
+    }
+
+    public void UpdateRemainTime(int remainTime, TextView textRemainTime)
+    {
+        DecimalFormat timeFormat = new DecimalFormat("00");
+        String formattedMinute = timeFormat.format(remainTime / 60);
+        String formattedSecond = timeFormat.format(remainTime % 60);
+        String formattedTime = formattedMinute + ":" + formattedSecond;
+        textRemainTime.setText(formattedTime);
     }
 }

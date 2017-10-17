@@ -43,12 +43,14 @@ public class MainActivity extends AppCompatActivity {
             public void onPageSelected(int position) {
                 PassportFragment passportFragment =
                         (PassportFragment) viewPager.getAdapter().instantiateItem(viewPager, PAGE_PASSPORT);
+                TextView textRemainTime = passportFragment.getView().findViewById(R.id.passport_remain_time);
+
                 if (PAGE_PASSPORT == position) {
                     ImageView qrCodeView = passportFragment.getView().findViewById(R.id.passport_qr_code);
-                    TextView textRemainTime = passportFragment.getView().findViewById(R.id.passport_remain_time);
                     passportFragment.GenerateQrCode(qrCodeView, textRemainTime);
                 } else {
                     passportFragment.DeleteQrCode();
+                    passportFragment.UpdateRemainTime(passportFragment.RE_GENERATE_TIME, textRemainTime);
                 }
             }
 

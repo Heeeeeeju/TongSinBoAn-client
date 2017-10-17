@@ -31,7 +31,7 @@ public class ProfileFragment extends Fragment {
 
     private void LoadProfile()
     {
-        // TODO : Load Image, Name, Department
+        // TODO : 프로필 이미지, 이름, 소속 서버에서 받아온 후 출력
         ImageView profileImage = getActivity().findViewById(R.id.profile_image);
 //        Picasso.with(getContext())
 //                .load()
