@@ -12,7 +12,9 @@
         android:id="@+id/user_type_option"
         android:layout_width="200dp"
         android:layout_height="50dp"
-        mstb:values="@array/user_type"/>
+        mstb:values="@array/user_type"
+        mstb:mstbColorNotPressedText="@android:color/darker_gray"
+        mstb:mstbColorPressedText="@android:color/white"/>
 
     <EditText
         android:id="@+id/user_type_group_name"

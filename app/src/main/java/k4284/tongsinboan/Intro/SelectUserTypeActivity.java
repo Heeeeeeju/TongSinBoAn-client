@@ -13,7 +13,6 @@ import org.honorato.multistatetogglebutton.ToggleButton;
 import org.json.JSONObject;
 
 import java.util.HashMap;
-import java.util.Map;
 
 import k4284.tongsinboan.App;
 import k4284.tongsinboan.MainActivity;
@@ -22,14 +21,12 @@ import k4284.tongsinboan.R;
 public class SelectUserTypeActivity extends AppCompatActivity {
 
     private final int ADMIN = 0;
-    private final int GUARD = 1;
-    private final int USER = 2;
+    private final int USER = 1;
 
     private int userType = -1;
     private String[] groupHint = {
             "관리 부대 이름을 입력하세요",
             "소속 부대 코드를 입력하세요",
-            "소속 부대 코드를 입력하세요"
     };
 
     HashMap<String, String> errorMessages;
@@ -41,12 +38,6 @@ public class SelectUserTypeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_user_type);
-
-        String id = getIntent().getStringExtra("id");
-        String password = getIntent().getStringExtra("password");
-        if (null != id && null != password) {
-            // TODO : 서버 통신해서 현재 상태 받아오기
-        }
 
         errorMessages = new HashMap<>();
         errorMessages.put("group_exists", "이미 존재하는 부대 이름입니다");
@@ -68,22 +59,80 @@ public class SelectUserTypeActivity extends AppCompatActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                boolean result = CheckRequired();
+                if (!result) {
+                    return;
+                }
+
                 new Thread() {
                     public void run() {
                         String requestName = "";
                         if (ADMIN == userType) {
                             requestName = "/gruop";
-                        } else if (GUARD == userType || USER == userType) {
+                        } else if (USER == userType) {
                             requestName = "/group/join";
                         }
                         JSONObject param = HandleGroupRequest();
 
-                        JSONObject response = App.PostRequest(requestName, param);
+                        JSONObject response = App.ServerRequest(App.REQUEST_POST, requestName, param);
                         HandleGroupResponse(response);
                     }
                 }.start();
             }
         });
+
+        InitStatus();
+    }
+
+    private void InitStatus()
+    {
+        String id = getIntent().getStringExtra("id");
+        String password = getIntent().getStringExtra("password");
+
+        if (null != id && null != password) {
+            new Thread() {
+                public void run() {
+                    String requestName = "/member/me";
+                    JSONObject response = App.ServerRequest(App.REQUEST_GET, requestName, null);
+                    try {
+                        boolean result = response.getBoolean("result");
+                        if (result) {
+                            JSONObject data = response.getJSONObject("data");
+                            final String code = data.getString("group_idx");
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    userType = USER;
+                                    userTypeView.setStates(new boolean[]{false, true});
+                                    if (!code.equals("null")) {
+                                        groupInfoView.setText(code);
+                                    }
+                                }
+                            });
+                        }
+                    } catch (Exception e) {
+                        Log.e("UserType", e.toString());
+                    }
+                }
+            }.start();
+        }
+    }
+
+    private boolean CheckRequired()
+    {
+        if (-1 == userType) {
+            App.MakeToastMessage("사용자 유형을 선택하세요");
+            return false;
+        } else if (groupInfoView.getText().toString().isEmpty()) {
+            if (ADMIN == userType) {
+                App.MakeToastMessage("부대 이름을 입력하세요");
+            } else if (USER == userType) {
+                App.MakeToastMessage("부대 코드를 입력하세요");
+            }
+            return false;
+        }
+
+        return true;
     }
 
     private JSONObject HandleGroupRequest()
@@ -114,6 +163,9 @@ public class SelectUserTypeActivity extends AppCompatActivity {
                     intent.putExtra("userType", "admin");
                 } else {
                     intent = new Intent(SelectUserTypeActivity.this, WaitApprovalActivity.class);
+                    intent.putExtra("id", getIntent().getStringExtra("id"));
+                    intent.putExtra("password", getIntent().getStringExtra("password"));
+                    intent.putExtra("groupIdx", getIntent().getStringExtra("groupIdx"));
                 }
                 startActivity(intent);
                 finish();

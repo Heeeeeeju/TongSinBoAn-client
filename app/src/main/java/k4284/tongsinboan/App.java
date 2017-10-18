@@ -31,6 +31,10 @@ public class App extends Application {
     public static int SelectedColor;
     public static int UnSelectedColor;
 
+    public static final String REQUEST_POST = "POST";
+    public static final String REQUEST_PUT = "PUT";
+    public static final String REQUEST_GET = "GET";
+
     public static final String ServerDomain = "http://10.53.128.145";
 
     private static String cookie = "";
@@ -62,7 +66,7 @@ public class App extends Application {
         wifiManager.setWifiEnabled(false);
     }
 
-    public static JSONObject PostRequest(String requestName, JSONObject params)
+    public static JSONObject ServerRequest(String requestMethod, String requestName, JSONObject params)
     {
         HttpURLConnection urlConnection = null;
         JSONObject response = null;
@@ -70,17 +74,18 @@ public class App extends Application {
             URL url = new URL(App.ServerDomain + requestName);
 
             urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setRequestMethod("POST");
-            urlConnection.setRequestProperty("Accept", "application/json");
+            urlConnection.setRequestMethod(requestMethod);
             urlConnection.setRequestProperty("Content-Type", "application/json");
-            urlConnection.setRequestProperty("Accept-Charset", "UTF-8");
             urlConnection.setRequestProperty("Cookie", cookie);
-            urlConnection.setDoInput(true);
-            urlConnection.setDoOutput(true);
 
-            OutputStream outputStream = urlConnection.getOutputStream();
-            outputStream.write(params.toString().getBytes());
-            outputStream.close();
+            if (requestMethod.equals(REQUEST_POST) || requestMethod.equals(REQUEST_PUT)) {
+                urlConnection.setDoInput(true);
+                urlConnection.setDoOutput(true);
+
+                OutputStream outputStream = urlConnection.getOutputStream();
+                outputStream.write(params.toString().getBytes());
+                outputStream.close();
+            }
 
             urlConnection.connect();
             String cookieTemp = urlConnection.getHeaderField("Set-Cookie");

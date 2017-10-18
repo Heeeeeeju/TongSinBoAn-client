@@ -1,23 +1,13 @@
 package k4284.tongsinboan.Intro;
 
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.view.menu.ExpandedMenuView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 
-import org.honorato.multistatetogglebutton.MultiStateToggleButton;
-import org.honorato.multistatetogglebutton.ToggleButton;
 import org.json.JSONObject;
-
-import java.io.IOException;
 
 import k4284.tongsinboan.App;
 import k4284.tongsinboan.R;
@@ -72,7 +62,7 @@ public class RegisterActivity extends AppCompatActivity {
         new Thread() {
             public void run() {
                 String requestName = "/member";
-                JSONObject response = App.PostRequest(requestName, accountInfo);
+                JSONObject response = App.ServerRequest(App.REQUEST_POST, requestName, accountInfo);
                 HandleResponse(response);
             }
         }.start();

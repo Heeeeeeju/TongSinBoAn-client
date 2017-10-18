@@ -11,12 +11,6 @@ import android.widget.Toast;
 
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
 import k4284.tongsinboan.App;
 import k4284.tongsinboan.MainActivity;
 import k4284.tongsinboan.R;
@@ -104,7 +98,7 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         String requestName = "/member/login";
-        JSONObject response = App.PostRequest(requestName, account);
+        JSONObject response = App.ServerRequest(App.REQUEST_POST, requestName, account);
 
         return response;
     }
