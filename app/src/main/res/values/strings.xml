@@ -8,6 +8,12 @@
         <item>유지</item>
     </string-array>
 
+    <string-array name="user_type">
+        <item>부대 관리자</item>
+        <item>출입구 관리자</item>
+        <item>일반 사용자</item>
+    </string-array>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

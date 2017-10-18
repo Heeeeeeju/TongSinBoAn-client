@@ -8,7 +8,16 @@ import android.content.Intent;
 import android.location.LocationManager;
 import android.net.wifi.WifiManager;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.widget.Toast;
+
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
@@ -21,6 +30,10 @@ public class App extends Application {
     private static Context context;
     public static int SelectedColor;
     public static int UnSelectedColor;
+
+    public static final String ServerDomain = "http://10.53.128.145";
+
+    private static String cookie = "";
 
     @Override
     public void onCreate() {
@@ -49,8 +62,50 @@ public class App extends Application {
         wifiManager.setWifiEnabled(false);
     }
 
-    public static void DisableGps()
+    public static JSONObject PostRequest(String requestName, JSONObject params)
     {
-//        LocationManager locationManager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
+        HttpURLConnection urlConnection = null;
+        JSONObject response = null;
+        try {
+            URL url = new URL(App.ServerDomain + requestName);
+
+            urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setRequestMethod("POST");
+            urlConnection.setRequestProperty("Accept", "application/json");
+            urlConnection.setRequestProperty("Content-Type", "application/json");
+            urlConnection.setRequestProperty("Accept-Charset", "UTF-8");
+            urlConnection.setRequestProperty("Cookie", cookie);
+            urlConnection.setDoInput(true);
+            urlConnection.setDoOutput(true);
+
+            OutputStream outputStream = urlConnection.getOutputStream();
+            outputStream.write(params.toString().getBytes());
+            outputStream.close();
+
+            urlConnection.connect();
+            String cookieTemp = urlConnection.getHeaderField("Set-Cookie");
+            if (cookieTemp != null) {
+                cookie = cookieTemp;
+            }
+
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
+            StringBuilder stringBuilder = new StringBuilder();
+            String line = null;
+            while ((line = bufferedReader.readLine()) != null) {
+                if(stringBuilder.length() > 0) {
+                    stringBuilder.append("\n");
+                }
+                stringBuilder.append(line);
+            }
+
+            response = new JSONObject(stringBuilder.toString());
+        } catch (Exception e) {
+            Log.e("Server", e.toString());
+            response = new JSONObject();
+        } finally {
+            urlConnection.disconnect();
+        }
+
+        return response;
     }
 }
