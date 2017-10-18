@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import k4284.tongsinboan.App;
 import k4284.tongsinboan.R;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -31,10 +32,11 @@ public class ScannerFragment extends Fragment {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (null != result) {
             if (null == result.getContents()) {
-                Toast.makeText(getContext(), "스캔을 취소했습니다", Toast.LENGTH_SHORT).show();
+                App.MakeToastMessage("스캔을 취소했습니다");
             } else {
-                Toast.makeText(getContext(), result.getContents(), Toast.LENGTH_SHORT).show();
+                App.MakeToastMessage(result.getContents());
                 // TODO : 출입 데이터 서버 전송
+                // TODO : 서버에서 데이터 받은 후 ScanResultActivity 로 이동
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);

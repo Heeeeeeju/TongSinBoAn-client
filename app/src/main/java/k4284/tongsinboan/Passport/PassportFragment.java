@@ -22,6 +22,7 @@ import com.google.zxing.qrcode.QRCodeWriter;
 import java.text.DecimalFormat;
 import java.util.Random;
 
+import k4284.tongsinboan.App;
 import k4284.tongsinboan.R;
 
 public class PassportFragment extends Fragment {
@@ -62,7 +63,8 @@ public class PassportFragment extends Fragment {
     public void GenerateQrCode(final ImageView qrCodeView, final TextView textRemainTime)
     {
         DeleteQrCode();
-        timerHandler.postDelayed(new Runnable() {
+        Handler handler = new Handler();
+        handler.post(new Runnable() {
             @Override
             public void run() {
                 UpdateRemainTime(RE_GENERATE_TIME, textRemainTime);
@@ -73,13 +75,13 @@ public class PassportFragment extends Fragment {
                         qrCodeView.setImageBitmap(bitmap);
                         GenerateTimer(RE_GENERATE_TIME, textRemainTime);
                     } else {
-                        Toast.makeText(getContext(), "출입 코드 생성에 실패했습니다", Toast.LENGTH_SHORT).show();
+                        App.MakeToastMessage("출입 코드 생성에 실패했습니다");
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
-        }, 200);
+        });
     }
 
     public void DeleteQrCode()

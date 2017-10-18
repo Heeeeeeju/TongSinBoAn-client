@@ -75,7 +75,7 @@ public class InitialSettingActivity extends AppCompatActivity {
         }
 
         if (!message.isEmpty()) {
-            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+            App.MakeToastMessage(message);
             return false;
         }
 
@@ -85,7 +85,7 @@ public class InitialSettingActivity extends AppCompatActivity {
     private void SubmitInitialSetting()
     {
         if (!selectType) {
-            Toast.makeText(getApplicationContext(), "본인의 유형을 선택하세요", Toast.LENGTH_SHORT).show();
+            App.MakeToastMessage("본인의 유형을 선택하세요");
             return;
         }
 

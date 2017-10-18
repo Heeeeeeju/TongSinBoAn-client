@@ -62,7 +62,7 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         // TODO : 서버와 통신해서 로그인
-        return LOGIN_GUARD;
+        return LOGIN_ADMIN;
     }
 
     private void HandleLoginDependOnResult(int result)

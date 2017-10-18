@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="k4284.tongsinboan.Admin.AddMDMPolicyActivity">
+
+    <EditText
+        android:id="@+id/add_policy_name"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"
+        android:hint="정책 이름"/>
+
+    <EditText
+        android:id="@+id/add_policy_detail"
+        android:layout_below="@+id/add_policy_name"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"
+        android:hint="정책 설명"/>
+
+    <TextView
+        android:id="@+id/add_policy_options"
+        android:layout_below="@id/add_policy_detail"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_vertical"
+        android:text="MDM 정책 선택"/>
+
+    <LinearLayout
+        android:id="@+id/add_policy_bottom_tab"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/add_policy_submit"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:text="확인"/>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#000" />
+
+        <Button
+            android:id="@+id/add_policy_cancel"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:text="취소"/>
+
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/add_policy_list"
+        android:layout_below="@id/add_policy_options"
+        android:layout_above="@id/add_policy_bottom_tab"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"/>
+
+</RelativeLayout>

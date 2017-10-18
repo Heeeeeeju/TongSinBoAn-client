@@ -39,6 +39,7 @@ public class MDMFragment extends Fragment {
         Drawable policyOff = ResourcesCompat.getDrawable(getResources(), R.drawable.policy_off, null);
         Drawable policyOn = ResourcesCompat.getDrawable(getResources(), R.drawable.policy_on, null);
 
+        // TODO : 서버에서 정책 값 받아와서 적용
         MDMPolicyAdapter adapter = new MDMPolicyAdapter();
         adapter.AddItem("전화", policyOff);
         adapter.AddItem("와이파이", policyOff);

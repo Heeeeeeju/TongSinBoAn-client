@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:mstb="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:layout_marginBottom="5dp">
+
+    <TextView
+        android:id="@+id/mdm_add_item_policy_name"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="10dp"
+        android:gravity="center_vertical"
+        android:text="정책 이름"
+        android:textSize="20sp"/>
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
+
+    <org.honorato.multistatetogglebutton.MultiStateToggleButton
+        android:id="@+id/mdm_add_item_option"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        mstb:values="@array/policy_option"
+        mstb:mstbColorNotPressedText="@android:color/darker_gray"
+        mstb:mstbColorPressedText="@android:color/white"/>
+
+</LinearLayout>
