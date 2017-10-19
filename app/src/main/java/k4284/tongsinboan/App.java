@@ -34,6 +34,8 @@ public class App extends Application {
     public static final int DEVICE_ADMIN = 777;
     public static final int PICK_IMAGE = 11111;
     public static final int CHANGE_POLICY = 1048;
+    public static final int ADD_ADMIN = 8080;
+    public static final int ADD_USER = 808;
 
     public static final String[] MdmNames = {
             "카메라",
@@ -196,4 +198,46 @@ public class App extends Application {
             Log.e("SaveUserData", e.toString());
         }
     }
+
+//    public static void ShowErrorMessage(String errorMessage)
+//    {
+//        context
+//        if (errorMessage.equals("authentication_required")) {
+//            MakeToastMessage("로그인 되어있지 않습니다");
+//        } else if (errorMessage.equals("policy_read_admin_failed")) {
+//            MakeToastMessage("서버 오류로 인해 조회에 실패했습니다");
+//        } else if (errorMessage.equals("policy_create_admin_failed")) {
+//            MakeToastMessage("서버 오류로 인해 추가에 실패했습니다");
+//        } else if (errorMessage.equals("no_permission")) {
+//            MakeToastMessage("정책에 대한 권한이 없습니다");
+//        } else if (errorMessage.equals("policy_verify_failed")) {
+//            MakeToastMessage("서버 오류로 인해 검증에 실패했습니다");
+//        } else if (errorMessage.equals("policy_member_read_failed")) {
+//            MakeToastMessage("서버 오류로 인해 조회에 실패했습니다");
+//        } else if (errorMessage.equals("upload_server_error")) {
+//            MakeToastMessage("서버 오류로 인해 업로드가 실패했습니다");
+//        } else if (errorMessage.equals("upload_img_exists")) {
+//            MakeToastMessage("이미 프로필 이미지가 존재합니다");
+//        } else if (errorMessage.equals("upload_failed")) {
+//            MakeToastMessage("서버 오류로 인해 업로드가 실패했습니다");
+//        } else if (errorMessage.equals("upload_wrong_image")) {
+//            MakeToastMessage("잘못된 이미지를 업로드했습니다");
+//        } else if (errorMessage.equals("upload_process_failed")) {
+//            MakeToastMessage("서버 오류로 인해 업로드가 실패했습니다");
+//        } else if (errorMessage.equals("group_exists")) {
+//            MakeToastMessage("이미 부대를 생성했거나 가입되어 있습니다");
+//        } else if (errorMessage.equals("group_create_failed")) {
+//            MakeToastMessage("서버 오류로 인해 부대 생성에 실패했습니다");
+//        } else if (errorMessage.equals("group_join_failed")) {
+//            MakeToastMessage("서버 오류로 인해 부대 가입에 실패했습니다");
+//        } else if (errorMessage.equals("group_join_failed")) {
+//            MakeToastMessage("잘못된 부대 번호입니다");
+//        } else if (errorMessage.equals("member_read_failed")) {
+//            MakeToastMessage("서버 오류로 인해 조회에 실패했습니다");
+//        } else if (errorMessage.equals("member_userid_exists")) {
+//            MakeToastMessage("이미 존재하는 아이디입니다");
+//        } else if (errorMessage.equals("member_create_failed")) {
+//            MakeToastMessage("서버 오류로 인해 회원가입에 실패했습니다");
+//        }
+//    }
 }

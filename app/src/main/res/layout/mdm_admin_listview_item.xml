@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="50dp"
+    android:layout_height="70dp"
+    android:orientation="vertical"
     android:gravity="center_vertical"
     android:focusable="false">
 
     <TextView
         android:id="@+id/mdm_admin_item_policy_name"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:gravity="center_vertical"
         android:focusable="false"
@@ -19,34 +19,11 @@
     <TextView
         android:id="@+id/mdm_admin_item_policy_detail"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
         android:gravity="center_vertical"
         android:focusable="false"
         android:text="정책 설명"
-        android:textSize="20sp"/>
-
-    <View
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:focusable="false"/>
-
-    <Button
-        android:id="@+id/mdm_admin_item_policy_edit"
-        android:layout_width="50dp"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="20dp"
-        android:focusable="false"
-        android:text="수정"
-        android:src="@drawable/policy_off"/>
-
-    <Button
-        android:id="@+id/mdm_admin_item_policy_remove"
-        android:layout_width="50dp"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="20dp"
-        android:focusable="false"
-        android:text="삭제"
-        android:src="@drawable/policy_off"/>
+        android:textSize="15sp"/>
 
 </LinearLayout>

@@ -1,8 +1,8 @@
 package k4284.tongsinboan.Admin;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,11 +13,11 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import org.honorato.multistatetogglebutton.MultiStateToggleButton;
-import org.honorato.multistatetogglebutton.ToggleButton;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import k4284.tongsinboan.App;
 import k4284.tongsinboan.R;
 
 /**
@@ -52,15 +52,31 @@ public class MDMPeopleListAdapter extends BaseAdapter {
         nameView.setText(listViewItem.GetName());
 
         ImageView profileImageView = convertView.findViewById(R.id.mdm_people_item_profile_image);
-        Picasso.with(context).load(listViewItem.GetProfileImage()).into(profileImageView);
+        Picasso.with(context)
+                .load(listViewItem.GetProfileImage())
+                .placeholder(R.drawable.default_profile)
+                .into(profileImageView);
 
-        Button remove = convertView.findViewById(R.id.mdm_people_item_remove);
+        TextView belongView = convertView.findViewById(R.id.mdm_people_item_belong);
+        belongView.setText(listViewItem.GetBelong());
+
+        ImageView checkView = convertView.findViewById(R.id.mdm_people_check_state);
+        Button remove = convertView.findViewById(R.id.mdm_people_remove);
         remove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO : 서버 통신 후 해당 정책에서 삭제
+                RemoveFromPolicy(position);
+                listViewItemList.remove(position);
+                notifyDataSetChanged();
             }
         });
+        if (listViewItem.GetShowCheck()) {
+            checkView.setVisibility(View.VISIBLE);
+            remove.setVisibility(View.INVISIBLE);
+        } else {
+            checkView.setVisibility(View.INVISIBLE);
+            remove.setVisibility(View.VISIBLE);
+        }
 
         return convertView;
     }
@@ -75,12 +91,44 @@ public class MDMPeopleListAdapter extends BaseAdapter {
         return listViewItemList.get(position);
     }
 
-    public void AddItem(String name, Uri image) {
+    public void AddItem(String name, Uri image, String belong) {
+        AddItem(name, image, belong, true);
+    }
+
+    public void AddItem(String name, Uri image, String belong, boolean showCheck)
+    {
+        AddItem(name, image, belong, showCheck, -1, -1, false);
+    }
+
+    public void AddItem(String name, Uri image, String belong, boolean showCheck, int policyIdx, int userIdx, boolean isAdmin)
+    {
         MDMPeopleListItem item = new MDMPeopleListItem();
 
         item.SetName(name);
         item.SetProfileImage(image);
+        item.SetBelong(belong);
+        item.SetShowCheck(showCheck);
+        item.SetPolicyIdx(policyIdx);
+        item.SetUserIdx(userIdx);
+        item.SetIsAdmin(isAdmin);
 
         listViewItemList.add(item);
+    }
+
+    private void RemoveFromPolicy(int position)
+    {
+        int policyIdx = listViewItemList.get(position).GetPolicyIdx();
+        int userIdx = listViewItemList.get(position).GetUserIdx();
+        String userType = "/user/";
+        if (listViewItemList.get(position).GetIsAdmin()) {
+            userType = "/admin/";
+        }
+        final String requestName = "/policy/" + policyIdx + userType + userIdx;
+        new Thread() {
+            public void run() {
+                JSONObject response = App.ServerRequest(App.REQUEST_DELETE, requestName);
+                Log.d("RemoveFromServer", response.toString());
+            }
+        }.start();
     }
 }

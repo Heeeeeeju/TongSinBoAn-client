@@ -49,24 +49,6 @@ public class ManageMDMPolicyAdapter extends BaseAdapter {
         TextView policyDetailView = convertView.findViewById(R.id.mdm_admin_item_policy_detail);
         policyDetailView.setText(listViewItem.GetPolicyDetail());
 
-        Button policyEdit = convertView.findViewById(R.id.mdm_admin_item_policy_edit);
-        policyEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, AddMDMPolicyActivity.class);
-                intent.putExtra("data", listViewItem.GetPolicyData().toString());
-                ((MainActivity)context).startActivityForResult(intent, App.CHANGE_POLICY);
-            }
-        });
-
-        Button policyRemove = convertView.findViewById(R.id.mdm_admin_item_policy_remove);
-        policyRemove.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO : 서버 통신 후 정책 삭제
-            }
-        });
-
         return convertView;
     }
 

@@ -63,7 +63,7 @@
                 android:layout_height="wrap_content"
                 android:text="추가"/>
 
-            <ListView
+            <k4284.tongsinboan.FullHeightListView
                 android:id="@+id/mdm_view_admin_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
@@ -79,7 +79,7 @@
                 android:layout_height="wrap_content"
                 android:text="추가"/>
 
-            <ListView
+            <k4284.tongsinboan.FullHeightListView
                 android:id="@+id/mdm_view_user_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
