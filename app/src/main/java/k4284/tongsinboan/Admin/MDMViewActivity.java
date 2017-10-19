@@ -191,6 +191,9 @@ public class MDMViewActivity extends AppCompatActivity {
                 JSONObject admin = data.getJSONObject(i);
                 String name = admin.getString("name");
                 String belong = admin.getString("belong");
+                if (belong.equals("null")) {
+                    belong = App.NoBelong;
+                }
                 String profileImage = admin.getString("profile_img");
                 Uri profileUri =
                         Uri.parse(App.ServerDomain + "/upload/" + profileImage);
@@ -238,6 +241,9 @@ public class MDMViewActivity extends AppCompatActivity {
                 JSONObject admin = data.getJSONObject(i);
                 String name = admin.getString("name");
                 String belong = admin.getString("belong");
+                if (belong.equals("null")) {
+                    belong = App.NoBelong;
+                }
                 String profileImage = admin.getString("profile_img");
                 Uri profileUri =
                         Uri.parse(App.ServerDomain + "/upload/" + profileImage);

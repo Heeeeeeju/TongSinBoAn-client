@@ -189,8 +189,8 @@ public class App extends Application {
                 App.User.belongName = belongName;
             }
             App.User.level = data.getInt("level");
-            String profileImageUri = (String)data.get("profile_img");
-            if (null != profileImageUri) {
+            String profileImageUri = data.getString("profile_img");
+            if (!profileImageUri.equals("null")) {
                 App.User.profileImageUri
                         = App.ServerDomain + "/upload/" + data.getString("profile_img");
             }

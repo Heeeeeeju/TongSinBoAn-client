@@ -55,7 +55,7 @@ public class ScanResultActivity extends AppCompatActivity {
             groupView.setText(groupName);
 
             String belong = data.getString("belong");
-            if (null != belong) {
+            if (null != belong && !belong.equals("null")) {
                 belongView.setText(belong);
             } else {
                 belongView.setText(App.NoBelong);

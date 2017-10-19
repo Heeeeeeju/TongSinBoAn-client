@@ -20,6 +20,7 @@
         android:layout_gravity="center_horizontal"
         android:paddingLeft="10dp"
         android:hint="아이디"
+        android:gravity="center_horizontal"
         android:textSize="20sp"/>
 
     <EditText
@@ -29,6 +30,7 @@
         android:layout_gravity="center_horizontal"
         android:paddingLeft="10dp"
         android:hint="비밀번호"
+        android:gravity="center_horizontal"
         android:inputType="textPassword"
         android:textSize="20sp"/>
 

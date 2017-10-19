@@ -52,7 +52,7 @@
 
         <Button
             android:id="@+id/mdm_people_remove"
-            android:layout_width="50dp"
+            android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:layout_gravity="center_vertical"
             android:layout_marginRight="20dp"
