@@ -1,14 +1,10 @@
 package k4284.tongsinboan;
 
-import android.app.admin.DevicePolicyManager;
 import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.media.AudioManager;
-import android.os.Handler;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -18,16 +14,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import k4284.tongsinboan.Admin.ManageMDMPolicyFragment;
 import k4284.tongsinboan.MDM.MDMFragment;
 import k4284.tongsinboan.Passport.PassportFragment;
 import k4284.tongsinboan.Profile.ProfileFragment;
-import k4284.tongsinboan.Scanner.ScannerFragment;
+import k4284.tongsinboan.Scanner.ScannerActivity;
+import k4284.tongsinboan.Scanner.ScannerListFragment;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MainActivity extends AppCompatActivity {
@@ -101,11 +95,6 @@ public class MainActivity extends AppCompatActivity {
                     passportFragment.PassTokenRequest();
                 } else {
                     passportFragment.DeleteQrCode();
-                    if (PAGE_SCANNER == position && GUARD == userType) {
-                        ScannerFragment scannerFragment =
-                                (ScannerFragment) viewPager.getAdapter().instantiateItem(viewPager, PAGE_SCANNER);
-                        scannerFragment.OpenScanner();
-                    }
                 }
             }
 
@@ -249,7 +238,7 @@ public class MainActivity extends AppCompatActivity {
             } else if (PAGE_SCANNER == position) {
                 if (GUARD == userType) {
                     if (null == fragmentScanner)
-                        return new ScannerFragment();
+                        return new ScannerListFragment();
                     return fragmentScanner;
                 } else if (ADMIN == userType) {
                     if (null == fragmentManage)

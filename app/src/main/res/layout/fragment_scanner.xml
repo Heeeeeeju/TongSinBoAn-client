@@ -2,12 +2,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="k4284.tongsinboan.Scanner.ScannerFragment">
+    tools:context="k4284.tongsinboan.Scanner.ScannerActivity">
 
-    <Button
-        android:id="@+id/scanner_open_camera"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="qr code 스캔"/>
+    <ListView
+        android:id="@+id/scanner_policy_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
 </FrameLayout>
