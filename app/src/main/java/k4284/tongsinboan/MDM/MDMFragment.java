@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
 import android.util.Log;
@@ -16,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import org.json.JSONArray;
@@ -50,8 +52,6 @@ public class MDMFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        LoadPolicyFromServer();
-        LoadPassRightFromServer();
     }
 
     @Override
@@ -63,20 +63,21 @@ public class MDMFragment extends Fragment {
         policyOption[PolicyOn] = ResourcesCompat.getDrawable(getResources(), R.drawable.policy_on, null);
         policyOption[PolicyOff] = ResourcesCompat.getDrawable(getResources(), R.drawable.policy_off, null);
 
-        MDMPolicyAdapter adapter = new MDMPolicyAdapter();
-        adapter.AddItem("카메라", policyOption[PolicyOff]);
-        adapter.AddItem("마이크", policyOption[PolicyOff]);
-        adapter.AddItem("GPS", policyOption[PolicyOff]);
-        adapter.AddItem("Wifi", policyOption[PolicyOff]);
-        adapter.AddItem("핫스팟", policyOption[PolicyOff]);
-        adapter.AddItem("블루투스", policyOption[PolicyOff]);
-
-        LoadPolicyFromServer();
+        MDMPolicyAdapter policyAdapter = new MDMPolicyAdapter();
+        policyAdapter.AddItem("카메라", policyOption[PolicyOff]);
+        policyAdapter.AddItem("마이크", policyOption[PolicyOff]);
+        policyAdapter.AddItem("GPS", policyOption[PolicyOff]);
+        policyAdapter.AddItem("Wifi", policyOption[PolicyOff]);
+        policyAdapter.AddItem("핫스팟", policyOption[PolicyOff]);
+        policyAdapter.AddItem("블루투스", policyOption[PolicyOff]);
 
         policyList = view.findViewById(R.id.mdm_policy_list);
-        policyList.setAdapter(adapter);
+        policyList.setAdapter(policyAdapter);
 
         passRightList = view.findViewById(R.id.mdm_pass_right_list);
+
+        LoadPolicyFromServer();
+        LoadPassRightFromServer();
 
         return view;
     }
@@ -91,13 +92,7 @@ public class MDMFragment extends Fragment {
                     boolean result = response.getBoolean("result");
                     if (result) {
                         final JSONObject data = response.getJSONObject("data");
-                        Handler handler = new Handler();
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                SetPolicy(data);
-                            }
-                        }, 5 * 1000);
+                        SetPolicyAfterDelay(data, 5 * 1000);
                     } else {
                         String errorMessage = response.getString("msg");
                         if (errorMessage.equals(App.ERROR_NOT_LOGIN)) {
@@ -111,11 +106,24 @@ public class MDMFragment extends Fragment {
         }.start();
     }
 
+    private void SetPolicyAfterDelay(final JSONObject data, final int milliseconds)
+    {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        SetPolicy(data);
+                    }
+                }, milliseconds);
+            }
+        });
+    }
+
     private void SetPolicy(JSONObject data)
     {
         try {
-            MDMPolicyAdapter adapter = (MDMPolicyAdapter) policyList.getAdapter();
-
             int mdmCamera = data.getInt("mdm_camera");
             int mdmMic = data.getInt("mdm_mic");
             int mdmGps = data.getInt("mdm_gps");
@@ -125,13 +133,11 @@ public class MDMFragment extends Fragment {
 
             if (Ignore != mdmCamera) {
                 DisableCamera(IntToBoolean(mdmCamera));
-                MDMPolicyItem item = (MDMPolicyItem) adapter.getItem(0);
-                item.SetPolicyValue(policyOption[mdmCamera]);
+                UpdateRow(0, policyOption[mdmCamera]);
             }
             if (Ignore != mdmMic) {
                 DisableMic(IntToBoolean(mdmMic));
-                MDMPolicyItem item = (MDMPolicyItem) adapter.getItem(1);
-                item.SetPolicyValue(policyOption[mdmMic]);
+                UpdateRow(1, policyOption[mdmMic]);
             }
 //            if (Ignore != mdmGps) {
 //                DisableGps(IntToBoolean(mdmGps));
@@ -144,8 +150,7 @@ public class MDMFragment extends Fragment {
 //            }
             if (Ignore != mdmBluetooth) {
                 DisableBluetooth(IntToBoolean(mdmBluetooth));
-                MDMPolicyItem item = (MDMPolicyItem) adapter.getItem(5);
-                item.SetPolicyValue(policyOption[mdmBluetooth]);
+                UpdateRow(5, policyOption[mdmBluetooth]);
             }
         } catch (Exception e) {
             Log.e("MDM", e.toString());
@@ -156,28 +161,49 @@ public class MDMFragment extends Fragment {
     {
         new Thread() {
             public void run() {
-                String requestName = "";
+                String requestName = "/policy";
                 final JSONObject response = App.ServerRequest(App.REQUEST_GET, requestName);
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        SetPassRight(response);
+                        try {
+                            JSONArray policies = response.getJSONArray("data");
+                            SetPassRight(policies);
+                        } catch (Exception e) {
+                            Log.e("LoadPassRightFromServer", e.toString());
+                        }
                     }
                 });
             }
         }.start();
     }
 
-    private void SetPassRight(JSONObject response)
+    private void SetPassRight(JSONArray policies)
     {
-        // TODO :
-//        String[] passRight;
-//
-//        int itemLayout = android.R.layout.simple_list_item_1;
-//        int textId = android.R.id.text1;
-//        ArrayAdapter<String> adapter
-//                = new ArrayAdapter<String>(getContext(), itemLayout, textId, passRight);
-//        passRightList.setAdapter(adapter);
+        MDMPassRightAdapter adapter = new MDMPassRightAdapter();
+        int size = policies.length();
+        try {
+            for (int i = 0; i < size; i++) {
+                JSONObject policy = policies.getJSONObject(i);
+                String name = policy.getString("name");
+                String detail = policy.getString("comment");
+                adapter.AddItem(name, detail);
+            }
+            passRightList.setAdapter(adapter);
+        } catch (Exception e) {
+            Log.e("SetPassRight", e.toString());
+        }
+    }
+
+    private void UpdateRow(int index, Drawable policy)
+    {
+        View view = policyList.getChildAt(index - policyList.getFirstVisiblePosition());
+        if(view == null) {
+            return;
+        }
+
+        ImageView policyView = view.findViewById(R.id.mdm_user_item_policy_value);
+        policyView.setImageDrawable(policy);
     }
 
     private void DisableCamera(boolean disable)
