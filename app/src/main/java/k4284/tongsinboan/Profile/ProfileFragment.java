@@ -29,6 +29,7 @@ public class ProfileFragment extends Fragment {
     ImageView profileImage;
     TextView userNameView;
     TextView groupNameView;
+    TextView belongNameView;
 
     public ProfileFragment()
     {
@@ -49,6 +50,7 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (null == App.User.profileImageUri) {
+                    App.MakeToastMessage("프로필 이미지 최초 1회 설정 이후에는 관리자 승인없이 변경할 수 없습니다");
                     Intent intent = new Intent();
                     intent.setType("image/*");
                     intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -59,8 +61,9 @@ public class ProfileFragment extends Fragment {
 
         userNameView = view.findViewById(R.id.profile_name);
         groupNameView = view.findViewById(R.id.profile_group);
+        belongNameView = view.findViewById(R.id.profile_belong);
 
-        SetProfileData();
+        UpdateUserData();
 
         return view;
     }
@@ -68,7 +71,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (App.PICK_IMAGE == requestCode) {
+        if (App.PICK_IMAGE == requestCode && null != data) {
             Uri selectedImage = data.getData();
             UploadProfileImage(selectedImage);
         }
@@ -80,8 +83,20 @@ public class ProfileFragment extends Fragment {
                 .load(App.User.profileImageUri)
                 .placeholder(R.drawable.default_profile)
                 .into(profileImage);
+
         userNameView.setText(App.User.name);
-        groupNameView.setText(App.User.groupName);
+
+        if (null != App.User.groupName) {
+            groupNameView.setText(App.User.groupName);
+        } else {
+            groupNameView.setText("(등록된 부대가 없습니다)");
+        }
+
+        if (null != App.User.belongName) {
+            belongNameView.setText(App.User.belongName);
+        } else {
+            belongNameView.setText("(등록된 소속이 없습니다)");
+        }
     }
 
     private void UploadProfileImage(final Uri selectedImage)
@@ -147,14 +162,6 @@ public class ProfileFragment extends Fragment {
         } else if (errorMessage.equals("upload_process_failed")) {
             App.MakeToastMessage("서버 오류로 인해 업로드 실패했습니다");
         }
-    }
-
-    public String GetPathFromUri(Uri uri){
-        Cursor cursor = getContext().getContentResolver().query(uri, null, null, null, null );
-        cursor.moveToNext();
-        String path = cursor.getString(cursor.getColumnIndex("_data"));
-        cursor.close();
-        return path;
     }
 
     public byte[] UriToBytes(Uri uri)

@@ -50,6 +50,7 @@ public class App extends Application {
         public String name;
         public String groupIdx;
         public String groupName;
+        public String belongName;
         public int level;
         public String profileImageUri;
     }
@@ -143,11 +144,15 @@ public class App extends Application {
     {
         try {
             App.User.name = data.getString("name");
-            App.User.groupIdx = data.getString("group_idx");
+            String groupIdx = data.getString("group_idx");
+            if (!groupIdx.equals("null")) {
+                App.User.groupIdx = groupIdx;
+            }
             App.User.groupName = data.getString("group_name");
+            App.User.belongName = (String)data.get("belong");
             App.User.level = data.getInt("level");
-            String profileImageUri = data.getString("profile_img");
-            if (!profileImageUri.equals("null")) {
+            String profileImageUri = (String)data.get("profile_img");
+            if (null != profileImageUri) {
                 App.User.profileImageUri
                         = App.ServerDomain + "/upload/" + data.getString("profile_img");
             }
