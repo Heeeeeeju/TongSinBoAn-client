@@ -18,6 +18,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
+import java.util.Map;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
@@ -138,9 +140,14 @@ public class App extends Application {
             }
 
             urlConnection.connect();
-            String cookieTemp = urlConnection.getHeaderField("Set-Cookie");
-            if (cookieTemp != null) {
-                cookie = cookieTemp;
+            Map<String, List<String>> headerFields = urlConnection.getHeaderFields();
+            List<String> cookiesHeader = headerFields.get("Set-Cookie");
+            if (cookiesHeader != null) {
+                String tmp = "";
+                for (String cookie_o : cookiesHeader) {
+                    tmp = tmp + cookie_o.split(";")[0] + ';';
+                }
+                cookie = tmp;
             }
 
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
@@ -173,7 +180,12 @@ public class App extends Application {
                 App.User.groupIdx = groupIdx;
             }
             App.User.groupName = data.getString("group_name");
-            App.User.belongName = (String)data.get("belong");
+            String belongName = data.getString("belong");
+            if (belongName.equals("null")) {
+                App.User.belongName = App.NoBelong;
+            } else {
+                App.User.belongName = belongName;
+            }
             App.User.level = data.getInt("level");
             String profileImageUri = (String)data.get("profile_img");
             if (null != profileImageUri) {
