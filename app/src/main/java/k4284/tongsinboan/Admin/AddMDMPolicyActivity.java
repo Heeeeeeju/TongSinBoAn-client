@@ -140,7 +140,7 @@ public class AddMDMPolicyActivity extends AppCompatActivity {
             if (result) {
                 Intent intent = new Intent();
                 intent.putExtra("policies", param.toString());
-                setResult(App.ADD_POLICY, intent);
+                setResult(App.CHANGE_POLICY, intent);
                 finish();
             } else {
                 String errorMessage = response.getString("msg");

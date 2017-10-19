@@ -163,9 +163,6 @@ public class MainActivity extends AppCompatActivity {
         if (2 == App.User.level && PAGE_SCANNER == currentPage) {
             Fragment scannerListFragment = ((PagerAdapter) viewPager.getAdapter()).fragmentScanner;
             scannerListFragment.onActivityResult(requestCode, resultCode, data);
-        } else if (3 == App.User.level && PAGE_MANAGE == currentPage) {
-            Fragment managMDMFragment = ((PagerAdapter) viewPager.getAdapter()).fragmentManage;
-            managMDMFragment.onActivityResult(requestCode, resultCode, data);
         }
         super.onActivityResult(requestCode, resultCode, data);
         if (App.DEVICE_ADMIN == requestCode) {

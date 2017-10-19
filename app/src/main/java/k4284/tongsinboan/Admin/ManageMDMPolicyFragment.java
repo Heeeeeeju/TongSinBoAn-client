@@ -36,7 +36,7 @@ public class ManageMDMPolicyFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (App.ADD_POLICY == resultCode) {
+        if (App.CHANGE_POLICY == resultCode) {
             GetPolicyFromServer();
         }
     }
@@ -52,7 +52,7 @@ public class ManageMDMPolicyFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), AddMDMPolicyActivity.class);
-                startActivityForResult(intent, App.ADD_POLICY);
+                startActivityForResult(intent, App.CHANGE_POLICY);
             }
         });
 
@@ -65,7 +65,7 @@ public class ManageMDMPolicyFragment extends Fragment {
                         Intent intent = new Intent(getContext(), MDMViewActivity.class);
                         JSONObject policy = data.getJSONObject(position);
                         intent.putExtra("data", policy.toString());
-                        startActivity(intent);
+                        startActivityForResult(intent, App.CHANGE_POLICY);
                     } catch (Exception e) {
                         Log.e("PolicyItemClick", e.toString());
                     }

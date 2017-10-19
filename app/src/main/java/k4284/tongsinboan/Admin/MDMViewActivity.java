@@ -16,10 +16,12 @@ import k4284.tongsinboan.R;
 
 public class MDMViewActivity extends AppCompatActivity {
 
+    private int idx;
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (App.ADD_POLICY == resultCode) {
+        if (App.CHANGE_POLICY == resultCode) {
             String policyString = data.getStringExtra("policies");
             try {
                 JSONObject policy = new JSONObject(policyString);
@@ -45,6 +47,8 @@ public class MDMViewActivity extends AppCompatActivity {
             TextView policyDetailView = (TextView) findViewById(R.id.mdm_view_detail);
             policyDetailView.setText(policy.getString("comment"));
 
+            idx = policy.getInt("idx");
+
             UpdatePolicyList(policy);
         } catch (Exception e) {
             Log.e("MDMViewActivity", e.toString());
@@ -57,7 +61,7 @@ public class MDMViewActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), AddMDMPolicyActivity.class);
                 String policyString = getIntent().getStringExtra("data");
                 intent.putExtra("data", policyString);
-                startActivityForResult(intent, App.ADD_POLICY);
+                startActivityForResult(intent, App.CHANGE_POLICY);
             }
         });
 
@@ -65,7 +69,7 @@ public class MDMViewActivity extends AppCompatActivity {
         removePolicy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                RemovePolicy(idx);
             }
         });
 
@@ -73,7 +77,7 @@ public class MDMViewActivity extends AppCompatActivity {
         addAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                
+
             }
         });
 
@@ -100,5 +104,41 @@ public class MDMViewActivity extends AppCompatActivity {
         } catch (Exception e) {
             Log.e("MDMView", e.toString());
         }
+    }
+
+    private void RemovePolicy(final int idx)
+    {
+        new Thread() {
+            public void run() {
+                String requestName = "/policy/" + idx;
+                JSONObject response = App.ServerRequest(App.REQUEST_DELETE, requestName);
+                try {
+                    boolean result = response.getBoolean("result");
+                    if (result) {
+                        setResult(App.CHANGE_POLICY);
+                        finish();
+                    } else {
+                        String errorMessage = response.getString("msg");
+                        ShowErrorMessage(errorMessage);
+                    }
+                } catch (Exception e) {
+                    Log.e("MDMView", e.toString());
+                }
+            }
+        }.start();
+    }
+
+    private void ShowErrorMessage(final String errorMessage)
+    {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (errorMessage.equals("authentication_required")) {
+                    App.MakeToastMessage("삭제 권한이 없습니다");
+                } else if(errorMessage.equals("policy_delete_failed")) {
+                    App.MakeToastMessage("서버 오류로 인해 삭제에 실패했습니다");
+                }
+            }
+        });
     }
 }

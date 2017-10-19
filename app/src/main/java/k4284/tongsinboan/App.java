@@ -31,7 +31,7 @@ public class App extends Application {
 
     public static final int DEVICE_ADMIN = 777;
     public static final int PICK_IMAGE = 11111;
-    public static final int ADD_POLICY = 1048;
+    public static final int CHANGE_POLICY = 1048;
 
     public static final String[] MdmNames = {
             "카메라",
@@ -63,6 +63,7 @@ public class App extends Application {
     public static final String REQUEST_POST = "POST";
     public static final String REQUEST_PUT = "PUT";
     public static final String REQUEST_GET = "GET";
+    public static final String REQUEST_DELETE = "DELETE";
 
     public static final String ServerDomain = "http://10.53.128.145";
 

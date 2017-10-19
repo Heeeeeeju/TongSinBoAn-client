@@ -55,7 +55,7 @@ public class ManageMDMPolicyAdapter extends BaseAdapter {
             public void onClick(View v) {
                 Intent intent = new Intent(context, AddMDMPolicyActivity.class);
                 intent.putExtra("data", listViewItem.GetPolicyData().toString());
-                ((MainActivity)context).startActivityForResult(intent, App.ADD_POLICY);
+                ((MainActivity)context).startActivityForResult(intent, App.CHANGE_POLICY);
             }
         });
 
