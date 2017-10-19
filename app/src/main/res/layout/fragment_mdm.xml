@@ -4,16 +4,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="#FFF"
     tools:context="k4284.tongsinboan.MDM.MDMFragment">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"
-        android:text="휴대폰 정책"
+        android:text="기능 차단"
         android:textSize="25sp"
         android:textColor="#FFF"
-        android:background="@color/unselected"/>
+        android:background="#58aac9"/>
 
     <ListView
         android:id="@+id/mdm_policy_list"
@@ -28,9 +29,9 @@
         android:text="출입 권한"
         android:textSize="25sp"
         android:textColor="#FFF"
-        android:background="@color/unselected"/>
+        android:background="#58aac9"/>
 
-    <ListView
+    <k4284.tongsinboan.FullHeightListView
         android:id="@+id/mdm_pass_right_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

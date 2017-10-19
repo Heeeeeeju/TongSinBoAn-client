@@ -2,13 +2,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="100dp"
-    android:orientation="horizontal"
+    android:orientation="vertical"
+    android:gravity="center_vertical"
     tools:context="k4284.tongsinboan.Scanner.ScannerListFragment">
 
     <TextView
         android:id="@+id/scanner_list_item_name"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical"/>
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:gravity="center_vertical"
+        android:textSize="25sp"/>
+
+    <TextView
+        android:id="@+id/scanner_list_item_detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:gravity="center_vertical"
+        android:textSize="17sp"/>
 
 </LinearLayout>

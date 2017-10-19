@@ -1,6 +1,5 @@
 package k4284.tongsinboan.Scanner;
 
-import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,7 +11,6 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import k4284.tongsinboan.App;
 import k4284.tongsinboan.R;
@@ -24,8 +22,8 @@ public class ScanResultActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_profile);
 
-        TextView title = (TextView)findViewById(R.id.profile_title);
-        title.setVisibility(View.INVISIBLE);
+        ImageView logo = (ImageView)findViewById(R.id.passport_logo);
+        logo.setVisibility(View.INVISIBLE);
 
         ImageView profileImageView = (ImageView)findViewById(R.id.profile_image);
         TextView nameView = (TextView)findViewById(R.id.profile_name);

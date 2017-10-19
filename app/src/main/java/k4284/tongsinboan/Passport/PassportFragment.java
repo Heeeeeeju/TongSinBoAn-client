@@ -51,14 +51,6 @@ public class PassportFragment extends Fragment {
         qrCodeView = view.findViewById(R.id.passport_qr_code);
         textRemainTime = view.findViewById(R.id.passport_remain_time);
 
-        Button buttonCreateQrCode = view.findViewById(R.id.passport_create_qr_code);
-        buttonCreateQrCode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PassTokenRequest();
-            }
-        });
-
         return view;
     }
 

@@ -7,7 +7,10 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -18,14 +21,18 @@
             <TextView
                 android:id="@+id/mdm_view_name"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:text="정책 이름"/>
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="정책 이름"
+                android:textSize="25sp"/>
 
             <TextView
                 android:id="@+id/mdm_view_detail"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:text="정책 설명"/>
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:text="정책 설명"
+                android:textSize="17sp"/>
 
             <k4284.tongsinboan.FullHeightListView
                 android:id="@+id/mdm_view_policy_list"
@@ -54,8 +61,11 @@
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:text="관리자"/>
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:gravity="center_vertical"
+                android:text="관리자"
+                android:textSize="20sp"/>
 
             <Button
                 android:id="@+id/mdm_view_add_admin"
@@ -70,8 +80,11 @@
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:text="사용자"/>
+                android:layout_height="30dp"
+                android:layout_marginTop="20dp"
+                android:gravity="center_vertical"
+                android:text="사용자"
+                android:textSize="20sp"/>
 
             <Button
                 android:id="@+id/mdm_view_add_user"

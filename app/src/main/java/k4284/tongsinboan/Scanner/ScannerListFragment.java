@@ -107,8 +107,9 @@ public class ScannerListFragment extends Fragment {
             try {
                 JSONObject policy = policies.getJSONObject(i);
                 String policyName = policy.getString("name");
+                String policyDetail = policy.getString("comment");
                 String policyIdx = policy.getString("idx");
-                adapter.AddItem(policyName, policyIdx);
+                adapter.AddItem(policyName, policyDetail, policyIdx);
             } catch (Exception e) {
                 Log.e("SetPolicyInAdapter", e.toString());
             }

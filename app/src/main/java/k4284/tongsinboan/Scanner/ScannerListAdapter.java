@@ -44,6 +44,9 @@ public class ScannerListAdapter extends BaseAdapter {
         TextView policyNameView = convertView.findViewById(R.id.scanner_list_item_name);
         policyNameView.setText(listViewItem.GetPolicyName());
 
+        TextView policyDetailView = convertView.findViewById(R.id.scanner_list_item_detail);
+        policyDetailView.setText(listViewItem.GetPolicyDetail());
+
         return convertView;
     }
 
@@ -59,11 +62,12 @@ public class ScannerListAdapter extends BaseAdapter {
         return listViewItemList.get(position);
     }
 
-    public void AddItem(String name, String idx)
+    public void AddItem(String name, String detail, String idx)
     {
         ScannerListItem item = new ScannerListItem();
 
         item.SetPolicyName(name);
+        item.SetPolicyDetail(detail);
         item.SetPolicyIdx(idx);
 
         listViewItemList.add(item);

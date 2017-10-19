@@ -44,7 +44,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/unselected"
-            android:text="정책/권한"
+            android:text="차단/권한"
             android:textColor="#FFF"/>
 
         <LinearLayout

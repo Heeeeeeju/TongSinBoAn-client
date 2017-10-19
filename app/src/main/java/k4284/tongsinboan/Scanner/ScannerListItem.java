@@ -6,6 +6,7 @@ package k4284.tongsinboan.Scanner;
 
 public class ScannerListItem {
     private String policyName;
+    private String policyDetail;
     private String policyIdx;
 
     public void SetPolicyName(String name)
@@ -16,6 +17,16 @@ public class ScannerListItem {
     public String GetPolicyName()
     {
         return this.policyName;
+    }
+
+    public void SetPolicyDetail(String detail)
+    {
+        this.policyDetail = detail;
+    }
+
+    public String GetPolicyDetail()
+    {
+        return this.policyDetail;
     }
 
     public void SetPolicyIdx(String idx)
