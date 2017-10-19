@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
 import android.util.Log;
@@ -27,8 +28,9 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MDMFragment extends Fragment {
 
-    Drawable policyOff;
-    Drawable policyOn;
+    Drawable[] policyOption;
+    private int PolicyOff = 0;
+    private int PolicyOn = 1;
 
     ListView policyList;
     ListView passRightList;
@@ -57,16 +59,19 @@ public class MDMFragment extends Fragment {
     {
         View view = inflater.inflate(R.layout.fragment_mdm, container, false);
 
-        policyOff = ResourcesCompat.getDrawable(getResources(), R.drawable.policy_off, null);
-        policyOn = ResourcesCompat.getDrawable(getResources(), R.drawable.policy_on, null);
+        policyOption = new Drawable[2];
+        policyOption[PolicyOn] = ResourcesCompat.getDrawable(getResources(), R.drawable.policy_on, null);
+        policyOption[PolicyOff] = ResourcesCompat.getDrawable(getResources(), R.drawable.policy_off, null);
 
-        // TODO : 서버에서 정책 값 받아와서 적용
         MDMPolicyAdapter adapter = new MDMPolicyAdapter();
-        adapter.AddItem("전화", policyOff);
-        adapter.AddItem("와이파이", policyOff);
-        adapter.AddItem("카메라", policyOff);
-        adapter.AddItem("GPS", policyOff);
-        adapter.AddItem("블루투스", policyOff);
+        adapter.AddItem("카메라", policyOption[PolicyOff]);
+        adapter.AddItem("마이크", policyOption[PolicyOff]);
+        adapter.AddItem("GPS", policyOption[PolicyOff]);
+        adapter.AddItem("Wifi", policyOption[PolicyOff]);
+        adapter.AddItem("핫스팟", policyOption[PolicyOff]);
+        adapter.AddItem("블루투스", policyOption[PolicyOff]);
+
+        LoadPolicyFromServer();
 
         policyList = view.findViewById(R.id.mdm_policy_list);
         policyList.setAdapter(adapter);
@@ -85,7 +90,14 @@ public class MDMFragment extends Fragment {
                 try {
                     boolean result = response.getBoolean("result");
                     if (result) {
-                        SetPolicy(response.getJSONObject("data"));
+                        final JSONObject data = response.getJSONObject("data");
+                        Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                SetPolicy(data);
+                            }
+                        }, 5 * 1000);
                     } else {
                         String errorMessage = response.getString("msg");
                         if (errorMessage.equals(App.ERROR_NOT_LOGIN)) {
@@ -102,14 +114,8 @@ public class MDMFragment extends Fragment {
     private void SetPolicy(JSONObject data)
     {
         try {
-            String[] policyNames = new String[]{
-                    "mdm_camera",
-                    "mdm_mic",
-                    "mdm_gps",
-                    "mdm_wifi",
-                    "mdm_hotspot",
-                    "mdm_bluetooth"
-            };
+            MDMPolicyAdapter adapter = (MDMPolicyAdapter) policyList.getAdapter();
+
             int mdmCamera = data.getInt("mdm_camera");
             int mdmMic = data.getInt("mdm_mic");
             int mdmGps = data.getInt("mdm_gps");
@@ -119,9 +125,13 @@ public class MDMFragment extends Fragment {
 
             if (Ignore != mdmCamera) {
                 DisableCamera(IntToBoolean(mdmCamera));
+                MDMPolicyItem item = (MDMPolicyItem) adapter.getItem(0);
+                item.SetPolicyValue(policyOption[mdmCamera]);
             }
             if (Ignore != mdmMic) {
                 DisableMic(IntToBoolean(mdmMic));
+                MDMPolicyItem item = (MDMPolicyItem) adapter.getItem(1);
+                item.SetPolicyValue(policyOption[mdmMic]);
             }
 //            if (Ignore != mdmGps) {
 //                DisableGps(IntToBoolean(mdmGps));
@@ -134,17 +144,11 @@ public class MDMFragment extends Fragment {
 //            }
             if (Ignore != mdmBluetooth) {
                 DisableBluetooth(IntToBoolean(mdmBluetooth));
+                MDMPolicyItem item = (MDMPolicyItem) adapter.getItem(5);
+                item.SetPolicyValue(policyOption[mdmBluetooth]);
             }
         } catch (Exception e) {
             Log.e("MDM", e.toString());
-        }
-
-        MDMPolicyAdapter adapter = (MDMPolicyAdapter) policyList.getAdapter();
-        int policySize = adapter.getCount();
-        for(int i=0; i<policySize; i++) {
-            MDMPolicyItem item = (MDMPolicyItem) adapter.getItem(i);
-            // TODO : policy On/Off 데이터 파싱해서 이미지 변경
-            item.SetPolicyValue(policyOn);
         }
     }
 

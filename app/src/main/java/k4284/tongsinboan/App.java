@@ -28,6 +28,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 public class App extends Application {
 
     public static final int DEVICE_ADMIN = 777;
+    public static final int PICK_IMAGE = 11111;
 
     private static Context context;
     public static int SelectedColor;
@@ -86,7 +87,7 @@ public class App extends Application {
         return ServerRequest(requestMethod, requestName, null);
     }
 
-    public static JSONObject ServerRequest(String requestMethod, String requestName, JSONObject params)
+    public static JSONObject ServerRequest(String requestMethod, String requestName, Object params)
     {
         HttpURLConnection urlConnection = null;
         JSONObject response = null;
@@ -103,7 +104,11 @@ public class App extends Application {
                 urlConnection.setDoOutput(true);
 
                 OutputStream outputStream = urlConnection.getOutputStream();
-                outputStream.write(params.toString().getBytes());
+                if (params instanceof byte[]) {
+                    outputStream.write((byte[])params);
+                } else {
+                    outputStream.write(params.toString().getBytes());
+                }
                 outputStream.close();
             }
 
@@ -132,5 +137,22 @@ public class App extends Application {
         }
 
         return response;
+    }
+
+    public static void SaveUserData(JSONObject data)
+    {
+        try {
+            App.User.name = data.getString("name");
+            App.User.groupIdx = data.getString("group_idx");
+            App.User.groupName = data.getString("group_name");
+            App.User.level = data.getInt("level");
+            String profileImageUri = data.getString("profile_img");
+            if (!profileImageUri.equals("null")) {
+                App.User.profileImageUri
+                        = App.ServerDomain + "/upload/" + data.getString("profile_img");
+            }
+        } catch (Exception e) {
+            Log.e("SaveUserData", e.toString());
+        }
     }
 }

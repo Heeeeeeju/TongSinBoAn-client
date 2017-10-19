@@ -22,9 +22,8 @@ public class LoginActivity extends AppCompatActivity {
     private final int LOGIN_ADMIN = 2;
     private final int BLANK_ID = 10;
     private final int BLANK_PASSWORD = 11;
-    private final int INCORRECT_ACCOUNT = 12;
+    private final int LOGIN_FAIL = 12;
     private final int FILL_REQUIRED = 13;
-    private final int LOGIN_FAIL = 13;
     private final int INITIAL_SETTING = 20;
     private final int WAIT_APPROVAL = 30;
     private final int ENTER_GROUP = 31;
@@ -54,7 +53,7 @@ public class LoginActivity extends AppCompatActivity {
                     new Thread() {
                         public void run() {
                             JSONObject response = RequestLogin(id, password);
-                            int handleResult = HandleJsonData(response);
+                            int handleResult = HandleLoginResponseData(response);
                             HandleLoginDependOnResult(handleResult);
                         }
                     }.start();
@@ -103,12 +102,12 @@ public class LoginActivity extends AppCompatActivity {
         return response;
     }
 
-    private int HandleJsonData(JSONObject response)
+    private int HandleLoginResponseData(JSONObject response)
     {
         try {
             groupIdx = "";
             JSONObject data = response.getJSONObject("data");
-            SaveUserData(data);
+            App.SaveUserData(data);
 
             int level = data.getInt("level");
             if (0 == level) {
@@ -134,21 +133,21 @@ public class LoginActivity extends AppCompatActivity {
 
     private void HandleLoginDependOnResult(int result)
     {
-        String message = "";
+        String errorMessage = "";
         switch (result) {
             case INITIAL_SETTING:
                 Intent settingIntent = new Intent(LoginActivity.this, InitialSettingActivity.class);
                 startActivity(settingIntent);
                 finish();
                 break;
-            case INCORRECT_ACCOUNT:
-                message = "입력한 정보가 일치하지 않습니다";
+            case LOGIN_FAIL:
+                errorMessage = "입력한 정보가 일치하지 않습니다";
                 break;
             case BLANK_ID:
-                message = "아이디를 입력하세요";
+                errorMessage = "아이디를 입력하세요";
                 break;
             case BLANK_PASSWORD:
-                message = "비밀번호를 입력하세요";
+                errorMessage = "비밀번호를 입력하세요";
                 break;
             case LOGIN_USER:
             case LOGIN_GUARD:
@@ -173,22 +172,14 @@ public class LoginActivity extends AppCompatActivity {
                 break;
         }
 
-        if (!message.isEmpty()) {
-            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void SaveUserData(JSONObject data)
-    {
-        try {
-            App.User.name = data.getString("name");
-            App.User.groupIdx = data.getString("group_idx");
-            App.User.groupName = data.getString("group_name");
-            App.User.level = data.getInt("level");
-            App.User.profileImageUri
-                    = App.ServerDomain + "/upload/" + data.getString("profile_img");
-        } catch (Exception e) {
-            Log.e("Login", e.toString());
+        if (!errorMessage.isEmpty()) {
+            final String message = errorMessage;
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                }
+            });
         }
     }
 }

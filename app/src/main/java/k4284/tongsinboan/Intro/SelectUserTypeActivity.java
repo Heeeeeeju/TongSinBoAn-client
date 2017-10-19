@@ -165,7 +165,7 @@ public class SelectUserTypeActivity extends AppCompatActivity {
                     intent = new Intent(SelectUserTypeActivity.this, WaitApprovalActivity.class);
                     intent.putExtra("id", getIntent().getStringExtra("id"));
                     intent.putExtra("password", getIntent().getStringExtra("password"));
-                    intent.putExtra("groupIdx", getIntent().getStringExtra("groupIdx"));
+                    intent.putExtra("groupIdx", groupInfoView.getText().toString());
                 }
                 startActivity(intent);
                 finish();
