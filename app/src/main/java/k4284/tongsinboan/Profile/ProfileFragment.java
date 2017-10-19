@@ -19,17 +19,10 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.URI;
 
 import k4284.tongsinboan.App;
 import k4284.tongsinboan.R;
-
-import static android.content.ContentValues.TAG;
 
 public class ProfileFragment extends Fragment {
 
@@ -102,7 +95,7 @@ public class ProfileFragment extends Fragment {
                 try {
                     boolean result = response.getBoolean("result");
                     if (result) {
-                        UpdateProfileImage(selectedImage);
+                        UpdateUserData();
                     } else {
                         String errorMessage = response.getString("msg");
                         ShowErrorMessage(errorMessage);
@@ -114,15 +107,8 @@ public class ProfileFragment extends Fragment {
         }.start();
     }
 
-    private void UpdateProfileImage(final Uri selectedImage)
+    private void UpdateUserData()
     {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                profileImage.setImageURI(selectedImage);
-            }
-        });
-
         new Thread() {
             public void run() {
                 String requestName = "/member/me";
@@ -130,11 +116,22 @@ public class ProfileFragment extends Fragment {
                 try {
                     JSONObject data = response.getJSONObject("data");
                     App.SaveUserData(data);
+                    UpdateProfileImage();
                 } catch (Exception e) {
                     Log.e("UpdateProfileImage", e.toString());
                 }
             }
         }.start();
+    }
+
+    private void UpdateProfileImage()
+    {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                SetProfileData();
+            }
+        });
     }
 
     private void ShowErrorMessage(String errorMessage)
