@@ -24,6 +24,7 @@
             android:layout_weight="1" />
 
         <Button
+            android:id="@+id/mdm_admin_add_policy"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginRight="20dp"

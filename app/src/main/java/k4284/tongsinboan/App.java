@@ -31,6 +31,25 @@ public class App extends Application {
 
     public static final int DEVICE_ADMIN = 777;
     public static final int PICK_IMAGE = 11111;
+    public static final int ADD_POLICY = 1048;
+
+    public static final String[] MdmNames = {
+            "카메라",
+            "마이크",
+            "GPS",
+            "Wifi",
+            "핫스팟",
+            "블루투스"
+    };
+
+    public static final String[] MdmKeys = {
+            "mdm_camera",
+            "mdm_mic",
+            "mdm_gps",
+            "mdm_wifi",
+            "mdm_hotspot",
+            "mdm_bluetooth"
+    };
 
     public static final String NoGroup = "(등록된 부대가 없습니다)";
     public static final String NoBelong = "(등록된 소속이 없습니다)";

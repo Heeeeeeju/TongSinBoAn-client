@@ -5,7 +5,9 @@ package k4284.tongsinboan.Admin;
  */
 
 public class AddMDMPolicyItem {
+
     private String policyName;
+    private int selectedValue;
 
     public void SetPolicyName(String name)
     {
@@ -15,5 +17,15 @@ public class AddMDMPolicyItem {
     public String GetPolicyName()
     {
         return this.policyName;
+    }
+
+    public void SetSelectedValue(int value)
+    {
+        this.selectedValue = value;
+    }
+
+    public int GetSelectedValue()
+    {
+        return this.selectedValue;
     }
 }

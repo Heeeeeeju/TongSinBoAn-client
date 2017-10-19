@@ -9,8 +9,12 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
+import k4284.tongsinboan.App;
+import k4284.tongsinboan.MainActivity;
 import k4284.tongsinboan.R;
 
 public class ManageMDMPolicyAdapter extends BaseAdapter {
@@ -37,17 +41,21 @@ public class ManageMDMPolicyAdapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.mdm_admin_listview_item, parent, false);
         }
 
-        ManageMDMPolicyItem listViewItem = listViewItemList.get(position);
+        final ManageMDMPolicyItem listViewItem = listViewItemList.get(position);
 
         TextView policyNameView = convertView.findViewById(R.id.mdm_admin_item_policy_name);
         policyNameView.setText(listViewItem.GetPolicyName());
+
+        TextView policyDetailView = convertView.findViewById(R.id.mdm_admin_item_policy_detail);
+        policyDetailView.setText(listViewItem.GetPolicyDetail());
 
         Button policyEdit = convertView.findViewById(R.id.mdm_admin_item_policy_edit);
         policyEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, AddMDMPolicyActivity.class);
-                context.startActivity(intent);
+                intent.putExtra("data", listViewItem.GetPolicyData().toString());
+                ((MainActivity)context).startActivityForResult(intent, App.ADD_POLICY);
             }
         });
 
@@ -74,10 +82,21 @@ public class ManageMDMPolicyAdapter extends BaseAdapter {
         return listViewItemList.get(position);
     }
 
-    public void AddItem(String title)
+    public void AddItem(JSONObject data)
     {
-        ManageMDMPolicyItem item = new ManageMDMPolicyItem();
-        item.SetPolicyName(title);
-        listViewItemList.add(item);
+        try {
+            ManageMDMPolicyItem item = new ManageMDMPolicyItem();
+            item.SetPolicyData(data);
+
+            String name = data.getString("name");
+            item.SetPolicyName(name);
+
+            String detail = data.getString("comment");
+            item.SetPolicyDetail(detail);
+
+            listViewItemList.add(item);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

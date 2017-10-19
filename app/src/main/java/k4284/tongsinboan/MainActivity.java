@@ -159,18 +159,21 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-        Fragment scannerListFragment = ((PagerAdapter)viewPager.getAdapter()).fragmentScanner;
-        scannerListFragment.onActivityResult(requestCode, resultCode, data);
-
-            super.onActivityResult(requestCode, resultCode, data);
-            if (App.DEVICE_ADMIN == requestCode) {
-                if (-1 != resultCode) {
-                    // TODO : make below public
-//                DisableCamera();
-                    // TODO : Toast 메세지 띄워주기 현재는 방법을 못찾았음
-                }
+        int currentPage = viewPager.getCurrentItem();
+        if (2 == App.User.level && PAGE_SCANNER == currentPage) {
+            Fragment scannerListFragment = ((PagerAdapter) viewPager.getAdapter()).fragmentScanner;
+            scannerListFragment.onActivityResult(requestCode, resultCode, data);
+        } else if (3 == App.User.level && PAGE_MANAGE == currentPage) {
+            Fragment managMDMFragment = ((PagerAdapter) viewPager.getAdapter()).fragmentManage;
+            managMDMFragment.onActivityResult(requestCode, resultCode, data);
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+        if (App.DEVICE_ADMIN == requestCode) {
+            if (-1 != resultCode) {
+                // TODO : make below public
+                // TODO : Toast 메세지 띄워주기 현재는 방법을 못찾았음
             }
-//        }
+        }
     }
 
     private final BroadcastReceiver bluetoothReceiver = new BroadcastReceiver() {
@@ -220,7 +223,7 @@ public class MainActivity extends AppCompatActivity {
         private Fragment fragmentProfile;
         private Fragment fragmentPassport;
         private Fragment fragmentMDM;
-        public Fragment fragmentScanner;
+        private Fragment fragmentScanner;
         private Fragment fragmentManage;
 
         public PagerAdapter(FragmentManager fragmentManager)

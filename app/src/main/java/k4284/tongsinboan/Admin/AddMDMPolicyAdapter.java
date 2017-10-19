@@ -13,6 +13,7 @@ import org.honorato.multistatetogglebutton.ToggleButton;
 
 import java.util.ArrayList;
 
+import k4284.tongsinboan.App;
 import k4284.tongsinboan.R;
 
 /**
@@ -23,15 +24,24 @@ public class AddMDMPolicyAdapter extends BaseAdapter {
 
     private ArrayList<AddMDMPolicyItem> listViewItemList = new ArrayList<AddMDMPolicyItem>();
     private boolean[] isSelected;
+    private boolean selectAble;
 
-    public AddMDMPolicyAdapter() {
+    public AddMDMPolicyAdapter()
+    {
+        InitIsSelected();
+        this.selectAble = true;
+    }
 
+    public AddMDMPolicyAdapter(boolean selectAble)
+    {
+        InitIsSelected();
+        this.selectAble = selectAble;
     }
 
     public void InitIsSelected()
     {
-        isSelected = new boolean[getCount()];
-        for (int i=0; i<getCount(); i++) {
+        isSelected = new boolean[App.MdmKeys.length];
+        for (int i=0; i<isSelected.length; i++) {
             isSelected[i] = false;
         }
     }
@@ -50,18 +60,26 @@ public class AddMDMPolicyAdapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.mdm_add_listview_item, parent, false);
         }
 
-        AddMDMPolicyItem listViewItem = listViewItemList.get(position);
+        final AddMDMPolicyItem listViewItem = listViewItemList.get(position);
 
         TextView titleTextView = convertView.findViewById(R.id.mdm_add_item_policy_name);
         titleTextView.setText(listViewItem.GetPolicyName());
 
-        MultiStateToggleButton option = convertView.findViewById(R.id.mdm_add_item_option);
+        final MultiStateToggleButton option = convertView.findViewById(R.id.mdm_add_item_option);
         option.setOnValueChangedListener(new ToggleButton.OnValueChangedListener() {
             @Override
             public void onValueChanged(int value) {
                 isSelected[position] = true;
+                listViewItem.SetSelectedValue(option.getValue());
             }
         });
+        int selectedValue = listViewItem.GetSelectedValue();
+        if (-1 != selectedValue) {
+            option.setStates(IntToBooleans(selectedValue));
+        }
+        if (!selectAble) {
+            option.setEnabled(false);
+        }
 
         return convertView;
     }
@@ -80,11 +98,27 @@ public class AddMDMPolicyAdapter extends BaseAdapter {
         return isSelected;
     }
 
-    public void AddItem(String title) {
+    public void AddItem(String policyName)
+    {
+        AddItem(policyName, -1);
+    }
+
+    public void AddItem(String policyName, int selectedValue)
+    {
         AddMDMPolicyItem item = new AddMDMPolicyItem();
-
-        item.SetPolicyName(title);
-
+        item.SetPolicyName(policyName);
+        item.SetSelectedValue(selectedValue);
         listViewItemList.add(item);
+    }
+
+    private boolean[] IntToBooleans(int value)
+    {
+        boolean[] booleans = new boolean[3];
+        for (int i=0; i<3; i++) {
+            booleans[i] = false;
+        }
+        booleans[value] = true;
+
+        return booleans;
     }
 }

@@ -64,12 +64,9 @@ public class MDMFragment extends Fragment {
         policyOption[PolicyOff] = ResourcesCompat.getDrawable(getResources(), R.drawable.policy_off, null);
 
         MDMPolicyAdapter policyAdapter = new MDMPolicyAdapter();
-        policyAdapter.AddItem("카메라", policyOption[PolicyOff]);
-        policyAdapter.AddItem("마이크", policyOption[PolicyOff]);
-        policyAdapter.AddItem("GPS", policyOption[PolicyOff]);
-        policyAdapter.AddItem("Wifi", policyOption[PolicyOff]);
-        policyAdapter.AddItem("핫스팟", policyOption[PolicyOff]);
-        policyAdapter.AddItem("블루투스", policyOption[PolicyOff]);
+        for (int i=0; i<App.MdmNames.length; i++) {
+            policyAdapter.AddItem(App.MdmNames[i], policyOption[PolicyOff]);
+        }
 
         policyList = view.findViewById(R.id.mdm_policy_list);
         policyList.setAdapter(policyAdapter);
