@@ -26,6 +26,11 @@ public class AddMDMPolicyItem {
 
     public int GetSelectedValue()
     {
+        if (1 == selectedValue) {
+            return 0;
+        } else if (0 == selectedValue) {
+            return 1;
+        }
         return this.selectedValue;
     }
 }

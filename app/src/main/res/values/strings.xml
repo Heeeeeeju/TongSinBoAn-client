@@ -3,8 +3,8 @@
     <string name="title_activity_login">Sign in</string>
 
     <string-array name="policy_option">
-        <item>활성화</item>
-        <item>비활성화</item>
+        <item>차단</item>
+        <item>해제</item>
         <item>유지</item>
     </string-array>
 

@@ -136,15 +136,18 @@ public class MDMFragment extends Fragment {
                 DisableMic(IntToBoolean(mdmMic));
                 UpdateRow(1, policyOption[mdmMic]);
             }
-//            if (Ignore != mdmGps) {
+            if (Ignore != mdmGps) {
 //                DisableGps(IntToBoolean(mdmGps));
-//            }
-//            if (Ignore != mdmWifi) {
-//                DisableWifi(IntToBoolean(mdmWifi));
-//            }
-//            if (Ignore != mdmHotspot) {
+                UpdateRow(2, policyOption[mdmMic]);
+            }
+            if (Ignore != mdmWifi) {
+                App.DisableWifi(IntToBoolean(mdmWifi));
+                UpdateRow(3, policyOption[mdmMic]);
+            }
+            if (Ignore != mdmHotspot) {
 //                DisableHotspot(IntToBoolean(mdmHotspot));
-//            }
+                UpdateRow(4, policyOption[mdmMic]);
+            }
             if (Ignore != mdmBluetooth) {
                 DisableBluetooth(IntToBoolean(mdmBluetooth));
                 UpdateRow(5, policyOption[mdmBluetooth]);
