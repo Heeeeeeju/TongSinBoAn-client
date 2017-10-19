@@ -31,6 +31,9 @@ public class App extends Application {
     public static int SelectedColor;
     public static int UnSelectedColor;
 
+    public static final String ERROR_NOT_LOGIN = "authentication_required";
+    public static final String ERROR_NOT_LOGIN_MESSAGE = "로그인 되어있지 않습니다";
+
     public static final String REQUEST_POST = "POST";
     public static final String REQUEST_PUT = "PUT";
     public static final String REQUEST_GET = "GET";
@@ -39,11 +42,21 @@ public class App extends Application {
 
     private static String cookie = "";
 
+    public static UserData User;
+    public class UserData {
+        public String name;
+        public String groupIdx;
+        public String groupName;
+        public int level;
+        public String profileImageUri;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
 
         context = this;
+        User = new UserData();
 
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
                 .setDefaultFontPath("fonts/D2Coding")
@@ -64,6 +77,11 @@ public class App extends Application {
     {
         WifiManager wifiManager = (WifiManager)context.getSystemService(Context.WIFI_SERVICE);
         wifiManager.setWifiEnabled(false);
+    }
+
+    public static JSONObject ServerRequest(String requestMethod, String requestName)
+    {
+        return ServerRequest(requestMethod, requestName, null);
     }
 
     public static JSONObject ServerRequest(String requestMethod, String requestName, JSONObject params)

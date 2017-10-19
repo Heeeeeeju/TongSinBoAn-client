@@ -93,7 +93,7 @@ public class SelectUserTypeActivity extends AppCompatActivity {
             new Thread() {
                 public void run() {
                     String requestName = "/member/me";
-                    JSONObject response = App.ServerRequest(App.REQUEST_GET, requestName, null);
+                    JSONObject response = App.ServerRequest(App.REQUEST_GET, requestName);
                     try {
                         boolean result = response.getBoolean("result");
                         if (result) {

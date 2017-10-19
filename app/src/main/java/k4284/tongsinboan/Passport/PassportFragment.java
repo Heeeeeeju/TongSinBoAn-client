@@ -12,23 +12,25 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 
+import org.json.JSONObject;
+
 import java.text.DecimalFormat;
-import java.util.Random;
 
 import k4284.tongsinboan.App;
 import k4284.tongsinboan.R;
 
 public class PassportFragment extends Fragment {
 
-    public final static int RE_GENERATE_TIME = 30;
     private Handler timerHandler;
+
+    ImageView qrCodeView;
+    TextView textRemainTime;
 
     public PassportFragment()
     {
@@ -46,34 +48,62 @@ public class PassportFragment extends Fragment {
     {
         View view = inflater.inflate(R.layout.fragment_passport, container, false);
 
-        final ImageView qrCodeView = view.findViewById(R.id.passport_qr_code);
-        final TextView textRemainTime = view.findViewById(R.id.passport_remain_time);
+        qrCodeView = view.findViewById(R.id.passport_qr_code);
+        textRemainTime = view.findViewById(R.id.passport_remain_time);
 
         Button buttonCreateQrCode = view.findViewById(R.id.passport_create_qr_code);
         buttonCreateQrCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GenerateQrCode(qrCodeView, textRemainTime);
+                PassTokenRequest();
             }
         });
 
         return view;
     }
 
-    public void GenerateQrCode(final ImageView qrCodeView, final TextView textRemainTime)
+    public void PassTokenRequest()
+    {
+        new Thread() {
+            public void run() {
+                String requestName = "/member/token";
+                JSONObject response = App.ServerRequest(App.REQUEST_GET, requestName);
+                try {
+                    boolean result = response.getBoolean("result");
+                    if (result) {
+                        JSONObject data = response.getJSONObject("data");
+                        GenerateQrCode(data);
+                    } else {
+                        String errorMessage = response.getString("msg");
+                        if (errorMessage.equals("authentication_required")) {
+                            App.MakeToastMessage("로그인 되어있지 않습니다");
+                        } else if (errorMessage.equals("member_token_create_failed")) {
+                            App.MakeToastMessage("서버 오류로 생성에 실패했습니다");
+                        }
+                    }
+                } catch (Exception e) {
+                    Log.e("Passport", e.toString());
+                }
+            }
+        }.start();
+    }
+
+    public void GenerateQrCode(final JSONObject data)
     {
         DeleteQrCode();
-        Handler handler = new Handler();
-        handler.post(new Runnable() {
+        getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                UpdateRemainTime(RE_GENERATE_TIME, textRemainTime);
                 try {
-                    String data = GeneratePassData();
-                    Bitmap bitmap = EncodeAsBitmap(data);
+                    int expireTime = data.getInt("expire");
+                    UpdateRemainTime(expireTime);
+
+                    String token = data.getString("token");
+                    Log.d("Passport", token);
+                    Bitmap bitmap = EncodeAsBitmap(token);
                     if (bitmap != null) {
                         qrCodeView.setImageBitmap(bitmap);
-                        GenerateTimer(RE_GENERATE_TIME, textRemainTime);
+                        GenerateTimer(expireTime, textRemainTime);
                     } else {
                         App.MakeToastMessage("출입 코드 생성에 실패했습니다");
                     }
@@ -86,18 +116,8 @@ public class PassportFragment extends Fragment {
 
     public void DeleteQrCode()
     {
-        // TODO : 서버와 통신해서 기존에 생성한 데이터 삭제
         timerHandler.removeCallbacksAndMessages(null);
         Log.d("Passport", "DeleteQrCode()");
-    }
-
-    private String GeneratePassData()
-    {
-        // TODO : 암호화된 데이터 생성 및 서버 전송
-        Log.d("Passport", "GenereatePassData");
-        Random random = new Random();
-        String data = String.valueOf(random.nextInt());
-        return data;
     }
 
     private Bitmap EncodeAsBitmap(String data) throws WriterException {
@@ -118,15 +138,15 @@ public class PassportFragment extends Fragment {
     {
         if (remainTime < 0) {
             DeleteQrCode();
-            GenerateTimer(RE_GENERATE_TIME, textRemainTime);
+            PassTokenRequest();
         } else {
-            WaitOneSecond(remainTime, textRemainTime);
+            WaitOneSecond(remainTime);
         }
     }
 
-    private void WaitOneSecond(final int remainTime, final TextView textRemainTime)
+    private void WaitOneSecond(final int remainTime)
     {
-        UpdateRemainTime(remainTime, textRemainTime);
+        UpdateRemainTime(remainTime);
         timerHandler.postDelayed(new Runnable(){
             @Override
             public void run() {
@@ -135,7 +155,7 @@ public class PassportFragment extends Fragment {
         }, 1000);
     }
 
-    public void UpdateRemainTime(int remainTime, TextView textRemainTime)
+    public void UpdateRemainTime(int remainTime)
     {
         DecimalFormat timeFormat = new DecimalFormat("00");
         String formattedMinute = timeFormat.format(remainTime / 60);

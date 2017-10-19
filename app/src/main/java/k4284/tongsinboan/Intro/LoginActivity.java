@@ -108,6 +108,8 @@ public class LoginActivity extends AppCompatActivity {
         try {
             groupIdx = "";
             JSONObject data = response.getJSONObject("data");
+            SaveUserData(data);
+
             int level = data.getInt("level");
             if (0 == level) {
                 groupIdx = data.getString("group_idx");
@@ -173,6 +175,20 @@ public class LoginActivity extends AppCompatActivity {
 
         if (!message.isEmpty()) {
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void SaveUserData(JSONObject data)
+    {
+        try {
+            App.User.name = data.getString("name");
+            App.User.groupIdx = data.getString("group_idx");
+            App.User.groupName = data.getString("group_name");
+            App.User.level = data.getInt("level");
+            App.User.profileImageUri
+                    = App.ServerDomain + "/upload/" + data.getString("profile_img");
+        } catch (Exception e) {
+            Log.e("Login", e.toString());
         }
     }
 }

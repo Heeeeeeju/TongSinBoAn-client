@@ -20,7 +20,7 @@
         android:gravity="center"/>
 
     <TextView
-        android:id="@+id/profile_department"
+        android:id="@+id/profile_group"
         android:layout_width="150dp"
         android:layout_height="50dp"
         android:text="소속"

@@ -38,7 +38,7 @@ public class MDMPolicyAdapter extends BaseAdapter {
 
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.mdm_user_listview_item, parent, false);
+            convertView = inflater.inflate(R.layout.mdm_policy_listview_item, parent, false);
         }
 
         TextView titleTextView = convertView.findViewById(R.id.mdm_user_item_policy_name) ;

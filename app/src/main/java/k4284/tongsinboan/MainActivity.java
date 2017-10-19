@@ -7,6 +7,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.media.AudioManager;
 import android.os.Handler;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.Fragment;
@@ -63,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         DisableCamera();
+        DisableMic(true);
 
         Intent intent = getIntent();
         if (null != intent) {
@@ -99,15 +101,11 @@ public class MainActivity extends AppCompatActivity {
 
                 PassportFragment passportFragment =
                         (PassportFragment) viewPager.getAdapter().instantiateItem(viewPager, PAGE_PASSPORT);
-                TextView textRemainTime = passportFragment.getView().findViewById(R.id.passport_remain_time);
 
                 if (PAGE_PASSPORT == position) {
-                    ImageView qrCodeView = passportFragment.getView().findViewById(R.id.passport_qr_code);
-                    passportFragment.GenerateQrCode(qrCodeView, textRemainTime);
+                    passportFragment.PassTokenRequest();
                 } else {
                     passportFragment.DeleteQrCode();
-                    passportFragment.UpdateRemainTime(passportFragment.RE_GENERATE_TIME, textRemainTime);
-
                     if (PAGE_SCANNER == position && GUARD == userType) {
                         ScannerFragment scannerFragment =
                                 (ScannerFragment) viewPager.getAdapter().instantiateItem(viewPager, PAGE_SCANNER);
@@ -194,6 +192,12 @@ public class MainActivity extends AppCompatActivity {
         } else {
             policyManager.setCameraDisabled(componentName, true);
         }
+    }
+
+    private void DisableMic(boolean mute)
+    {
+        AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        audioManager.setMicrophoneMute(mute);
     }
 
     private void DisableBluetooth()
