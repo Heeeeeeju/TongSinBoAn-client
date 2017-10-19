@@ -69,7 +69,7 @@ public class App extends Application {
     public static final String REQUEST_GET = "GET";
     public static final String REQUEST_DELETE = "DELETE";
 
-    public static final String ServerDomain = "http://10.53.128.145";
+    public static final String ServerDomain = "https://swcamp.cpsoft.co.kr";
 
     private static String cookie = "";
 
