@@ -89,13 +89,13 @@ public class ProfileFragment extends Fragment {
         if (null != App.User.groupName) {
             groupNameView.setText(App.User.groupName);
         } else {
-            groupNameView.setText("(등록된 부대가 없습니다)");
+            groupNameView.setText(App.NoGroup);
         }
 
         if (null != App.User.belongName) {
             belongNameView.setText(App.User.belongName);
         } else {
-            belongNameView.setText("(등록된 소속이 없습니다)");
+            belongNameView.setText(App.NoBelong);
         }
     }
 

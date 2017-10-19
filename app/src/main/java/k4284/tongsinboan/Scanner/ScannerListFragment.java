@@ -131,7 +131,7 @@ public class ScannerListFragment extends Fragment {
         }
     }
 
-    public void OpenScanner()
+    private void OpenScanner()
     {
         IntentIntegrator integrator = new IntentIntegrator(getActivity());
         integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
@@ -143,7 +143,7 @@ public class ScannerListFragment extends Fragment {
         integrator.initiateScan();
     }
 
-    private void SendScanResultToServer(final String token)
+    public void SendScanResultToServer(final String token)
     {
         new Thread() {
             public void run() {
@@ -164,28 +164,36 @@ public class ScannerListFragment extends Fragment {
     private void HandleScanResult(JSONObject response)
     {
         try {
+            Intent intent = new Intent(getContext(), ScanResultActivity.class);
+
             boolean result = response.getBoolean("result");
-            if (result) {
-                Intent intent = new Intent(getContext(), ScanResultActivity.class);
-                startActivity(intent);
-            } else {
+            if (!result) {
                 String errorMessage = response.getString("msg");
                 ShowScanErrorMessage(errorMessage);
+            } else {
+                JSONObject data = response.getJSONObject("data");
+                intent.putExtra("userData", data.toString());
+                intent.putExtra("result", result);
+                startActivity(intent);
             }
         } catch (Exception e) {
             Log.e("HandleScanResult", e.toString());
         }
     }
 
-    private void ShowScanErrorMessage(String errorMessage)
+    private void ShowScanErrorMessage(final String errorMessage)
     {
-        if (errorMessage.equals("authentication_required")) {
-            App.MakeToastMessage("검증 권한이 없습니다");
-        } else if (errorMessage.equals("no_permission")) {
-            App.MakeToastMessage("정책에 대한 권한이 없습니다");
-            // TODO : 유저 안된다고 표시
-        } else if (errorMessage.equals("policy_verify_failed")) {
-            App.MakeToastMessage("서버 오류로 인해 정책 검증에 실패했습니다");
-        }
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (errorMessage.equals("authentication_required")) {
+                    App.MakeToastMessage("검증 권한이 없습니다");
+                } else if (errorMessage.equals("no_permission")) {
+                    App.MakeToastMessage("정책에 대한 권한이 없습니다");
+                } else if (errorMessage.equals("policy_verify_failed")) {
+                    App.MakeToastMessage("서버 오류로 인해 정책 검증에 실패했습니다");
+                }
+            }
+        });
     }
 }

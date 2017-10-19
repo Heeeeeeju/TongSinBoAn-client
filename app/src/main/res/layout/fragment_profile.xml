@@ -8,14 +8,25 @@
     tools:context="k4284.tongsinboan.Intro.RegisterActivity">
 
     <TextView
+        android:id="@+id/profile_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="출입증"/>
 
-    <ImageView
-        android:id="@+id/profile_image"
+    <FrameLayout
         android:layout_width="300dp"
-        android:layout_height="400dp" />
+        android:layout_height="400dp">
+
+        <ImageView
+            android:id="@+id/profile_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <ImageView
+            android:id="@+id/profile_result"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </FrameLayout>
 
     <TextView
         android:id="@+id/profile_name"

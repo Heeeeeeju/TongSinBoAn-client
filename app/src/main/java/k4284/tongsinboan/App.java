@@ -27,10 +27,14 @@ import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 public class App extends Application {
 
+    private static Context context;
+
     public static final int DEVICE_ADMIN = 777;
     public static final int PICK_IMAGE = 11111;
 
-    private static Context context;
+    public static final String NoGroup = "(등록된 부대가 없습니다)";
+    public static final String NoBelong = "(등록된 소속이 없습니다)";
+
     public static int SelectedColor;
     public static int UnSelectedColor;
 

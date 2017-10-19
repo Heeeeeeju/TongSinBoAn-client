@@ -16,6 +16,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+
 import k4284.tongsinboan.Admin.ManageMDMPolicyFragment;
 import k4284.tongsinboan.MDM.MDMFragment;
 import k4284.tongsinboan.Passport.PassportFragment;
@@ -155,14 +158,19 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (App.DEVICE_ADMIN == requestCode) {
-            if (-1 != resultCode) {
-                // TODO : make below public
+        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+        Fragment scannerListFragment = ((PagerAdapter)viewPager.getAdapter()).fragmentScanner;
+        scannerListFragment.onActivityResult(requestCode, resultCode, data);
+
+            super.onActivityResult(requestCode, resultCode, data);
+            if (App.DEVICE_ADMIN == requestCode) {
+                if (-1 != resultCode) {
+                    // TODO : make below public
 //                DisableCamera();
-                // TODO : Toast 메세지 띄워주기 현재는 방법을 못찾았음
+                    // TODO : Toast 메세지 띄워주기 현재는 방법을 못찾았음
+                }
             }
-        }
+//        }
     }
 
     private final BroadcastReceiver bluetoothReceiver = new BroadcastReceiver() {
@@ -207,13 +215,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private class PagerAdapter extends FragmentPagerAdapter
+    public class PagerAdapter extends FragmentPagerAdapter
     {
-        Fragment fragmentProfile;
-        Fragment fragmentPassport;
-        Fragment fragmentMDM;
-        Fragment fragmentScanner;
-        Fragment fragmentManage;
+        private Fragment fragmentProfile;
+        private Fragment fragmentPassport;
+        private Fragment fragmentMDM;
+        public Fragment fragmentScanner;
+        private Fragment fragmentManage;
 
         public PagerAdapter(FragmentManager fragmentManager)
         {
@@ -225,24 +233,24 @@ public class MainActivity extends AppCompatActivity {
             // TODO : Refactoring
             if (PAGE_PROFILE == position) {
                 if (null == fragmentProfile)
-                    return new ProfileFragment();
+                    fragmentProfile = new ProfileFragment();
                 return fragmentProfile;
             } else if (PAGE_PASSPORT == position) {
                 if (null == fragmentPassport)
-                    return new PassportFragment();
+                    fragmentPassport = new PassportFragment();
                 return fragmentPassport;
             } else if (PAGE_MDM == position) {
                 if (null == fragmentMDM)
-                    return new MDMFragment();
+                    fragmentMDM = new MDMFragment();
                 return fragmentMDM;
             } else if (PAGE_SCANNER == position) {
                 if (GUARD == userType) {
                     if (null == fragmentScanner)
-                        return new ScannerListFragment();
+                        fragmentScanner = new ScannerListFragment();
                     return fragmentScanner;
                 } else if (ADMIN == userType) {
                     if (null == fragmentManage)
-                        return new ManageMDMPolicyFragment();
+                        fragmentManage = new ManageMDMPolicyFragment();
                     return fragmentManage;
                 }
             }
