@@ -105,10 +105,10 @@ public class App extends Application {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
 
-    public static void DisableWifi(boolean disable)
+    public static void DisableWifi(boolean enable)
     {
         WifiManager wifiManager = (WifiManager)context.getSystemService(Context.WIFI_SERVICE);
-        wifiManager.setWifiEnabled(disable);
+        wifiManager.setWifiEnabled(enable);
     }
 
     public static JSONObject ServerRequest(String requestMethod, String requestName)

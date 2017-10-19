@@ -141,7 +141,7 @@ public class MDMFragment extends Fragment {
                 UpdateRow(2, policyOption[mdmMic]);
             }
             if (Ignore != mdmWifi) {
-                App.DisableWifi(IntToBoolean(mdmWifi));
+                App.DisableWifi(!IntToBoolean(mdmWifi));
                 UpdateRow(3, policyOption[mdmMic]);
             }
             if (Ignore != mdmHotspot) {
