@@ -68,7 +68,7 @@ public class SelectUserTypeActivity extends AppCompatActivity {
                     public void run() {
                         String requestName = "";
                         if (ADMIN == userType) {
-                            requestName = "/gruop";
+                            requestName = "/group";
                         } else if (USER == userType) {
                             requestName = "/group/join";
                         }

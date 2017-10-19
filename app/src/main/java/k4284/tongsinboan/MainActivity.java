@@ -32,8 +32,6 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MainActivity extends AppCompatActivity {
 
-    private final int DEVICE_ADMIN = 777;
-
     private final int PAGE_PROFILE = 0;
     private final int PAGE_PASSPORT = 1;
     private final int PAGE_MDM = 2;
@@ -62,9 +60,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        DisableCamera();
-        DisableMic(true);
 
         Intent intent = getIntent();
         if (null != intent) {
@@ -172,40 +167,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (DEVICE_ADMIN == requestCode) {
+        if (App.DEVICE_ADMIN == requestCode) {
             if (-1 != resultCode) {
-                DisableCamera();
+                // TODO : make below public
+//                DisableCamera();
                 // TODO : Toast 메세지 띄워주기 현재는 방법을 못찾았음
             }
         }
-    }
-
-    private void DisableCamera()
-    {
-        DevicePolicyManager policyManager = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
-        ComponentName componentName = new ComponentName(this, CameraDisableReceiver.class);
-        if (!policyManager.isAdminActive(componentName)) {
-            Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
-            intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, componentName);
-            intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, "Disable Camera");
-            startActivityForResult(intent, DEVICE_ADMIN);
-        } else {
-            policyManager.setCameraDisabled(componentName, true);
-        }
-    }
-
-    private void DisableMic(boolean mute)
-    {
-        AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        audioManager.setMicrophoneMute(mute);
-    }
-
-    private void DisableBluetooth()
-    {
-        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-//        if (bluetoothAdapter.isEnabled()) {
-            bluetoothAdapter.disable();
-//        }
     }
 
     private final BroadcastReceiver bluetoothReceiver = new BroadcastReceiver() {
@@ -222,7 +190,8 @@ public class MainActivity extends AppCompatActivity {
                         Log.d("MainActivity", "Bluetooth STATE_TURNING_ON");
                     case BluetoothAdapter.STATE_ON:
                         Log.d("MainActivity", "Bluetooth STATE_ON");
-                        DisableBluetooth();
+//                        DisableBluetooth();
+                        // TODO :
                         break;
                 }
             }

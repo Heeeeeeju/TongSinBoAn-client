@@ -27,6 +27,8 @@ import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 public class App extends Application {
 
+    public static final int DEVICE_ADMIN = 777;
+
     private static Context context;
     public static int SelectedColor;
     public static int UnSelectedColor;
